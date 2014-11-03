@@ -24,7 +24,6 @@ public class AndroidEmulatorAdapter {
 	public static final String ANDROID_APK_FILE = "/Users/Monil/Documents/Study/273/Project/RemindMe.apk";
 	public static final String START_ACTIVITY_VIEW = "shell am start \"intent:#Intent;scheme=customapp;package=com.batteryalert.home.Home\"";
 
-	
 	/**
 	 * emulatorName : name the emulator which you want to create
 	 * targetId : give target id, use command [android list targets] and [./android list targets == for linux/mac ] 
