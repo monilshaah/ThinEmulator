@@ -1,9 +1,11 @@
 package com.thinemulator.beans;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class AndroidEmulator {
 	
-	private String emulatorName;
-	private String emulatorTargetId;
+	@NotBlank(message = "emulatorName can not be empty") private String emulatorName;
+	@NotBlank(message = "emulatorTargetId can not be empty") private String emulatorTargetId;
 	
 	public String getEmulatorName() {
 		return emulatorName;
