@@ -29,7 +29,7 @@ public class EmulatorController {
 	AndroidEmulatorAdapter androidEmulatorAdapter = new AndroidEmulatorAdapter();
 	MongoDBAdapter mongoDBAdapter = new MongoDBAdapter();
 	
-	@RequestMapping(value = "", method = RequestMethod.GET, produces = "applicaiton/jsons")
+	@RequestMapping(value = "", method = RequestMethod.GET, produces = "application/json")
 	public EmulatorUser getUsers(@PathVariable String userId) {
 		System.out.println("***calling DB connection...");
 		EmulatorUser user = mongoDBAdapter.getEmulatorUser(userId);
@@ -44,7 +44,7 @@ public class EmulatorController {
 		Map<String, String> responseBody = new HashMap<String, String>();
 		if (validationResult.hasErrors()) {
 			List<ObjectError> errorList = validationResult.getAllErrors();
-			String errors = null;
+			String errors = "";
 			int cnt = 0;
 			while(cnt < errorList.size()) {
 				errors += errorList.get(cnt).getDefaultMessage()+"; ";
