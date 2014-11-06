@@ -9,12 +9,13 @@ import com.thinemulator.beans.AndroidEmulator;
 
 public class AndroidEmulatorAdapter {
 	public static final String ANDRIOD_SDK_ADDRESS = "/Users/Monil/Documents/Study/273/Project/adt-bundle-mac-x86_64-20140702/sdk";
-	public static final String ANDROID_ADDRESS = "/tools/android";
+	public static final String ANDROID_ADDRESS = "/tools/android ";
 	public static final String EMULATOR_ADDRESS = "/tools/emulator";
 	public static final String ANDROID_ADB_PATH = "/platform-tools/adb";
 	public static final String CREATE_ANDROID = " -s create ";
-	public static final String ECHO_NO = "echo no | ";
-	public static final String CREATE_ANDROID_AVD = "avd -n ";
+	public static final String DELETE_ANDROID = " delete ";
+	public static final String DEVICE_DEFINITION = " -d ";
+	public static final String ANDROID_AVD = "avd -n ";
 	public static final String CREATE_ANDROID_TARGET = " -t ";
 	public static final String CREATE_ANDROID_PATH = " -p /Users/Monil/.android/avd";
 	public static final String WAIT_FOR_ADB = "wait-for-device";
@@ -28,7 +29,7 @@ public class AndroidEmulatorAdapter {
 	/**
 	 * emulatorName : name the emulator which you want to create
 	 * targetId : give target id, use command [android list targets] and [./android list targets == for linux/mac ] 
-	 * 
+	 * deviceId : give device id, use command [android list device] and [./android list device == for linux/mac ]
 	 * @param emulatorName
 	 * @param targetId
 	 * @throws IOException
@@ -36,16 +37,16 @@ public class AndroidEmulatorAdapter {
 	public void createEmulator(AndroidEmulator newEmulator) {
 		Runtime runTime = Runtime.getRuntime();
 		try {
-		System.out.println(ECHO_NO.concat(ANDRIOD_SDK_ADDRESS).concat(ANDROID_ADDRESS).concat(" ").concat(CREATE_ANDROID).concat(CREATE_ANDROID_AVD).concat(newEmulator.getEmulatorName()).concat(CREATE_ANDROID_TARGET).concat(newEmulator.getEmulatorTargetId()));
-		Process launchEmulatorProcess = runTime.exec(ECHO_NO.concat(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(" ").concat(CREATE_ANDROID).concat(CREATE_ANDROID_AVD).concat(newEmulator.getEmulatorName()).concat(CREATE_ANDROID_TARGET).concat(newEmulator.getEmulatorTargetId())));
-		 InputStream stderr = launchEmulatorProcess.getErrorStream();
+		System.out.println(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(newEmulator.getEmulatorName()).concat(CREATE_ANDROID_TARGET).concat(newEmulator.getEmulatorTargetId()).concat(DEVICE_DEFINITION).concat(newEmulator.getEmulatorDeviceId()));
+		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(newEmulator.getEmulatorName()).concat(CREATE_ANDROID_TARGET).concat(newEmulator.getEmulatorTargetId()).concat(DEVICE_DEFINITION).concat(newEmulator.getEmulatorDeviceId()));
+		/* InputStream stderr = launchEmulatorProcess.getErrorStream();
          InputStreamReader isr = new InputStreamReader(stderr);
          BufferedReader br = new BufferedReader(isr);
          String line = null;
          System.out.println("<ERROR>");
          while ( (line = br.readLine()) != null)
              System.out.println(line);
-         System.out.println("</ERROR>");
+         System.out.println("</ERROR>");*/
 		//System.out.println("Command error : "+ launchEmulatorProcess.waitFor());
 		//Process createEmulator = runTime.exec("createemulator.sh");
 		} catch(IOException e) {
@@ -64,21 +65,19 @@ public class AndroidEmulatorAdapter {
 	public Process startEmulator(String emulatorName) {
 		Runtime runTime = Runtime.getRuntime();
 		try {
-		//Process androidTargetVersions = runTime.exec(ANDROID_ADDRESS.concat(" ").concat(emulatorName));
-			
 		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(EMULATOR_ADDRESS).concat(" -avd ").concat(emulatorName));
 		System.out.println(ANDRIOD_SDK_ADDRESS.concat(EMULATOR_ADDRESS).concat(" -avd ").concat(emulatorName));
-		InputStream stderr = launchEmulatorProcess.getErrorStream();
+		/*InputStream stderr = launchEmulatorProcess.getErrorStream();
         InputStreamReader isr = new InputStreamReader(stderr);
         BufferedReader br = new BufferedReader(isr);
         String line = null;
         System.out.println("<ERROR>");
         while ( (line = br.readLine()) != null)
             System.out.println(line);
-        System.out.println("</ERROR>");
+        System.out.println("</ERROR>");*/
 		return launchEmulatorProcess;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -86,6 +85,18 @@ public class AndroidEmulatorAdapter {
 		return null;
 	}
 	
+	public void deleteEmulator(String emulatorName) {
+		Runtime runTime = Runtime.getRuntime();
+		try {
+		System.out.println(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(DELETE_ANDROID).concat(ANDROID_AVD).concat(emulatorName));
+		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(DELETE_ANDROID).concat(ANDROID_AVD).concat(emulatorName));
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * install APK on emulator.
 	 * Needs to update to work with emulator device id.

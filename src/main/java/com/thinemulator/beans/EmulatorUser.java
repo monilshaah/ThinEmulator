@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class EmulatorUser {
 	@Id
 	private String userId;
+	
 	private List<String> emulatorList;
 	
 	public String getUserId() {

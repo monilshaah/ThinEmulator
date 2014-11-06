@@ -53,7 +53,6 @@ public class EmulatorController {
 			createdStatus = HttpStatus.BAD_REQUEST;
 			responseBody.put("Errors", errors);
 		} else {
-			androidEmulatorAdapter.createEmulator(newAndroidEmulator);
 			String opStatus = mongoDBAdapter.addEmulator(userId, newAndroidEmulator.getEmulatorName());
 			//TODO check status of operation
 			if (opStatus.equals("success")) {
@@ -62,8 +61,8 @@ public class EmulatorController {
 			} else {
 				createdStatus = HttpStatus.OK;
 				responseBody.put("Errors",opStatus);
-			}
-				
+			}	
+			androidEmulatorAdapter.createEmulator(newAndroidEmulator);
 		}
 		return new ResponseEntity<Map<String,String>>(responseBody, new HttpHeaders(), createdStatus);
 	}
@@ -114,6 +113,8 @@ public class EmulatorController {
 			deleteStatus = HttpStatus.OK;
 			responseBody.put("Errors", opStatus);
 		}
+		androidEmulatorAdapter.deleteEmulator(emulatorName);
+		//TODO check status of command
 		return new ResponseEntity<Map<String,String>>(responseBody, new HttpHeaders(), deleteStatus);
 	}
 	

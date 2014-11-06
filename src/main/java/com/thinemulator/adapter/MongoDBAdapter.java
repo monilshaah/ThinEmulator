@@ -31,7 +31,7 @@ public class MongoDBAdapter {
 		Query searchUserQuery = new Query(Criteria.where("_id").is(userId));
 		EmulatorUser searchedUser = mongoOperation.findOne(searchUserQuery, EmulatorUser.class);
 		if (searchedUser.getEmulatorList().contains(emulatorName)) {
-			opStatus = "Emulator with ".concat(emulatorName).concat(" already present.");
+			opStatus = "Emulator ".concat(emulatorName).concat(" already present.");
 			System.out.println(opStatus);
 		} else {
 			Query updateEmulatorListQuery = new Query(Criteria.where("_id").is(userId));
@@ -50,15 +50,14 @@ public class MongoDBAdapter {
 		Query searchUserQuery = new Query(Criteria.where("_id").is(userId));
 		EmulatorUser searchedUser = mongoOperation.findOne(searchUserQuery, EmulatorUser.class);
 		if (searchedUser.getEmulatorList().contains(emulatorName)) {
-			opStatus = "Emulator isnot created";
-			System.out.println(opStatus);
-		} else {
-			//Query updateEmulatorListQuery = new Query(Criteria.where("_id").is(userId));
 			Update update = new Update();
 			update.pull("emulatorList", emulatorName);
 			mongoOperation.updateFirst(searchUserQuery, update, EmulatorUser.class);
 			//TODO test status of db operation
 			opStatus = "success";
+		} else {
+			opStatus = "Emulator isnot created";
+			System.out.println(opStatus);
 		}
 		return opStatus;
 	}

@@ -6,10 +6,8 @@
 package com.thinemulator.beans;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.UnknownHostException;
 import java.util.Properties;
 
 import org.springframework.context.annotation.Bean;
