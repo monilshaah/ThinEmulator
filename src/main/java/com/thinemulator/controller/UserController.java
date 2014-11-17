@@ -1,21 +1,25 @@
 package com.thinemulator.controller;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.thinemulator.adapter.AnnotationConfigApplicationContext;
-import com.thinemulator.adapter.ApplicationContext;
-import com.thinemulator.adapter.MongoOperations;
-import com.thinemulator.beans.EmulatorUser;
 import com.thinemulator.beans.SpringMongoConfig;
 import com.thinemulator.beans.UserBean;
-import com.thinemulator.utility.*;
+import com.thinemulator.utility.NotificationUtility;
 
 
 @Controller
@@ -25,7 +29,7 @@ public class UserController extends SpringBootServletInitializer{
 	private ApplicationContext ctx;
 	private MongoOperations mongoOperation;
 	 
-	public MongoDBAdapter() {
+	public UserController() {
 		this.ctx = new AnnotationConfigApplicationContext(SpringMongoConfig.class);
 		this.mongoOperation = (MongoOperations)ctx.getBean("mongoTemplate");
 	}
@@ -42,7 +46,7 @@ public class UserController extends SpringBootServletInitializer{
     
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @ResponseBody
-    public User createUser(@RequestBody final User user) throws Exception{
+    public UserBean createUser(@RequestBody final UserBean user) throws Exception{
     	Query searchUserQuery = new Query(Criteria.where("username").is(user.username));
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
     	
@@ -70,7 +74,7 @@ public class UserController extends SpringBootServletInitializer{
     @ResponseBody
     public void emailAuth(@RequestBody final User user,
     		@RequestParam(value="hash", defaultValue="000") String hash) throws Exception{
-    	String pwd = getHash(user.password);
+    	String pwd = getHash(user.getPassword());
     	/* TODO 
     	Query searchQuery = new Query(Criteria.where("hashcode").is(hash));
     	Query setQuery = new Query( "$set", new BasicDBObject("password", pwd));
