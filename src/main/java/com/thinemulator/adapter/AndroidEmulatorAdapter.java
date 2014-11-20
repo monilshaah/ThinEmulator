@@ -26,6 +26,8 @@ public class AndroidEmulatorAdapter {
 	public static final String ANDROID_APK_FILE = properties.getProperty("ANDROID_APK_FILE");
 	public static final String START_ACTIVITY_VIEW = properties.getProperty("START_ACTIVITY_VIEW");
 
+	
+
 	/**
 	 * emulatorName : name the emulator which you want to create
 	 * targetId : give target id, use command [android list targets] and [./android list targets == for linux/mac ] 

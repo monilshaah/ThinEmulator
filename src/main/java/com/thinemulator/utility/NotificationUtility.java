@@ -17,13 +17,18 @@ public class NotificationUtility {
 		
 		Properties properties = Config.readProperties();
 		// Host server to send email
+
 		String SMTP_HOST = properties.getProperty("SMTP_HOST");
+
      	// Sender's email address
         String FROM_ADDRESS = properties.getProperty("FROM_ADDRESS"); 
+
         // Name of the sender 
         String FROM_NAME = properties.getProperty("FROM_NAME");  
+
         // Receiver's email address
         String TO_ADDRESS = properties.getProperty("TO_ADDRESS");
+
        
         try {  
             Properties props = new Properties();  
