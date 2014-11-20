@@ -11,15 +11,13 @@ public class NotificationUtility {
 
 	public static void sendEmail(String hash,  String url){
 		// Host server to send email
-   	    String SMTP_HOST = "smtp.gmail.com";       
+		String SMTP_HOST = Config.readProperties().getProperty("SMTP_HOST");
      	// Sender's email address
-        String FROM_ADDRESS = "ram.0737@gmail.com"; 
+        String FROM_ADDRESS = Config.readProperties().getProperty("FROM_ADDRESS"); 
         // Name of the sender 
-        String FROM_NAME = "Ramnivas";  
+        String FROM_NAME = Config.readProperties().getProperty("FROM_NAME");  
         // Receiver's email address
-        String TO_ADDRESS = "ram.0737@gmail.com"; 
-        
-         
+        String TO_ADDRESS = Config.readProperties().getProperty("TO_ADDRESS");
        
         try {  
             Properties props = new Properties();  
@@ -55,7 +53,9 @@ class SocialAuth extends Authenticator {
     @Override  
     protected PasswordAuthentication getPasswordAuthentication() {  
 
-        return new PasswordAuthentication("", "");  
-
+        return new PasswordAuthentication(
+        		Config.readProperties().getProperty("FROM_ADDRESS"), 
+        		Config.readProperties().getProperty("FROM_ADDRESS_PWD")
+        	   );  
     }  
 }  
