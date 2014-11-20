@@ -20,6 +20,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.thinemulator.beans.SpringMongoConfig;
 import com.thinemulator.beans.UserBean;
+import com.thinemulator.utility.Config;
 import com.thinemulator.utility.DataUtility;
 import com.thinemulator.utility.NotificationUtility;
 
@@ -61,7 +62,8 @@ public class UserController extends SpringBootServletInitializer{
     		tempUser = null;
     		tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
     		if(tempUser != null){
-    			NotificationUtility.sendEmail(DataUtility.getHash(tempUser.toString()), "http://localhost:8080/signup/emailauth?hash=");
+    			String EMAIL_AUTH_URL = Config.readProperties().getProperty("EMAIL_AUTH_URL");
+    			NotificationUtility.sendEmail(DataUtility.getHash(tempUser.toString()), EMAIL_AUTH_URL);
     			return tempUser;
     		}
     		else{

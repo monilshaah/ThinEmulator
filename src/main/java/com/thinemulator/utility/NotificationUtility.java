@@ -1,25 +1,29 @@
 package com.thinemulator.utility;
 
-import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Properties;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 
 public class NotificationUtility {
 
 	public static void sendEmail(String hash,  String url){
+		
+		Properties properties = Config.readProperties();
 		// Host server to send email
-   	    String SMTP_HOST = "smtp.gmail.com";       
+		String SMTP_HOST = properties.getProperty("SMTP_HOST");
      	// Sender's email address
-        String FROM_ADDRESS = "ram.0737@gmail.com"; 
+        String FROM_ADDRESS = properties.getProperty("FROM_ADDRESS"); 
         // Name of the sender 
-        String FROM_NAME = "Ramnivas";  
+        String FROM_NAME = properties.getProperty("FROM_NAME");  
         // Receiver's email address
-        String TO_ADDRESS = "ram.0737@gmail.com"; 
-        
-         
+        String TO_ADDRESS = properties.getProperty("TO_ADDRESS");
        
         try {  
             Properties props = new Properties();  
@@ -55,7 +59,9 @@ class SocialAuth extends Authenticator {
     @Override  
     protected PasswordAuthentication getPasswordAuthentication() {  
 
-        return new PasswordAuthentication("", "");  
-
+        return new PasswordAuthentication(
+        		Config.readProperties().getProperty("FROM_ADDRESS"), 
+        		Config.readProperties().getProperty("FROM_ADDRESS_PWD")
+        	   );  
     }  
 }  
