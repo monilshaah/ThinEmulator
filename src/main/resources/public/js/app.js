@@ -15,19 +15,35 @@ $.fn.serializeObject = function()
     return o;
 };
 
+
 $(function() {
-    $('#signupbutton').click(function() {
-    $.ajax({
-    url : $( '#signup' ).attr( 'action' ),
-    data :  JSON.stringify($('#signup').serializeObject()),
-    type : "POST",
-    contentType : "application/json",
-    success: function(result) {
-    	console.log(result);
-    },
-    failure : function(result) {
-    	console.log(result);
-    }
-    });  
-    });
+	$('#signupbutton').click(function() {
+		$.ajax({
+			url : $( '#signup' ).attr( 'action' ),
+			data :  JSON.stringify($('#signup').serializeObject()),
+			type : "POST",
+			contentType : "application/json",
+			success: function(result) {
+				console.log(result);
+			},
+			failure : function(result) {
+				console.log(result);
+			}
+		});
+	});
+
+	$('#loginbutton').click(function() {
+		$.ajax({
+			url : $('#login').attr('action'),
+			data : JSON.stringify($('#login').serializeObject()),
+			type : "POST",
+			contentType : "application/json",
+			success: function(result) {
+				console.log(result);
+			},
+			failure : function(result) {
+				console.log(result);
+			}
+		});
+	});
 });

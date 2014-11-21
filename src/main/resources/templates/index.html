@@ -77,15 +77,15 @@ $(document).ready(function(){
 	</div>
 	
 	<aside class="top-sidebar well">
-					<article>
-					<!--<h3>Contact Us : <br/></h3>-->
-					<form  method="post" action="#">
-						<input type="email" name="email_id" placeHolder="Email Id" required="required"/>
-						<input type="password" name="password" placeHolder="Password" required="required"/>
-						<br/>
-						<input type="submit" class="btn btn-primary aligncenter" name="login" value="Login"/>
-					</form>
-				    </article>
+		<article>
+		<!--<h3>Contact Us : <br/></h3>-->
+		<form  method="post" action="/login" th:object="${userbean}" id="login">
+			<input type="text" th:field="*{username}" placeHolder="Name" required="required"/>
+			<input type="password" th:field="*{password}" placeHolder="password" required="required"/>
+			<br/>
+			<input type="submit" class="btn btn-primary aligncenter" name="login" value="Login" id="loginbutton"/>
+		</form>
+	    </article>
 	</aside>
 		</div>
 	

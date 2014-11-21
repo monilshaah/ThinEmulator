@@ -85,7 +85,8 @@ public class UserController extends SpringBootServletInitializer{
     		}
     	}
     }
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
+    
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public void Login(@RequestBody final UserBean user) throws Exception{
     	String pwd = DataUtility.getHash(user.password);
@@ -93,7 +94,7 @@ public class UserController extends SpringBootServletInitializer{
         						.append("password", pwd);
     	Query searchUserQuery = new Query(Criteria.where("username").is(user.username).and("password").is(user.password) );
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
-    	System.out.println("USER LOGGED IN : "+tempUser.email);
+    	System.out.println("USER LOGGED IN : "+ tempUser.email);
     }
     
     
