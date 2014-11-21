@@ -49,11 +49,16 @@ public class UserController extends SpringBootServletInitializer{
    }*/
     
 	
-	@RequestMapping(value="/", method = RequestMethod.GET)
+	@RequestMapping(value={"","/", "/index"}, method = RequestMethod.GET)
 	public String renderIndex(Model model) {
 		System.out.println("returning index file");
 		model.addAttribute("userbean", new UserBean());
 		return "index";
+	}
+	
+	@RequestMapping(value="/welcome", method = RequestMethod.GET)
+	public String renderSuccessSignup(Model model) {
+		return "signupsuccess";
 	}
 	
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
@@ -85,16 +90,19 @@ public class UserController extends SpringBootServletInitializer{
     		}
     	}
     }
-    
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    @ResponseBody
-    public void Login(@RequestBody final UserBean user) throws Exception{
+    public @ResponseBody String Login(@RequestBody final UserBean user) throws Exception{
     	String pwd = DataUtility.getHash(user.password);
     	BasicDBObject query = new BasicDBObject("username", user.username)
         						.append("password", pwd);
     	Query searchUserQuery = new Query(Criteria.where("username").is(user.username).and("password").is(user.password) );
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
-    	System.out.println("USER LOGGED IN : "+ tempUser.email);
+    	System.out.println("USER LOGGED IN : "+tempUser);
+    	if(null!=tempUser) {
+    		return "{\"success\":\"true\"}";	
+    	} else {
+    		return "{\"success\":\"false\"}";
+    	}
     }
     
     

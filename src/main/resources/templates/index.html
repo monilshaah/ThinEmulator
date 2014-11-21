@@ -42,20 +42,20 @@ $(document).ready(function(){
 		<br/>
 		<div class=" well" >	
 	<form method="post" action="#" th:action="@{/signup}" th:object="${userbean}" id="signup">
-			<input type="text" th:field="*{username}" placeHolder="First Name" required="required"/>
+			<input type="text" th:field="*{username}" placeHolder="First Name" required="required"></input>
 			<!-- <input type="text" name="last_name" placeHolder="Last Name" required/>
 			<select name="gender" placeHolder="Gender">
 				<option value="Male">Male</option>
 				<option value="Female">Female</option>
 			</select>
 			<input type="tel"  name="contact_number" placeHolder="Contact Number" required/> -->
-			<input type="email" th:field="*{email}" placeHolder="Email Address"/>
+			<input type="email" th:field="*{email}" placeHolder="Email Address" required="required"/>
 			<!-- <input type="text" name="city" placeHolder="City" required/>
 			<input type="text" name="state" placeHolder="State" required/> -->
 			<input type="password" th:field="*{password}" placeHolder="password" required="required"/>
 			<!-- <input type="password" name="confirm_password" placeHolder="Confirm password" required/> -->
 			<br/>
-			<input type="button" class="btn btn-primary alignright" name="signup" value="Sign Up" id="signupbutton"/>
+			<input type="submit" class="btn btn-primary alignright" name="signup" value="Sign Up" id="signupbutton" />
 	</form>
 	</div>
 	</div>
@@ -77,15 +77,15 @@ $(document).ready(function(){
 	</div>
 	
 	<aside class="top-sidebar well">
-		<article>
-		<!--<h3>Contact Us : <br/></h3>-->
-		<form  method="post" action="/login" th:object="${userbean}" id="login">
-			<input type="text" th:field="*{username}" placeHolder="Name" required="required"/>
-			<input type="password" th:field="*{password}" placeHolder="password" required="required"/>
-			<br/>
-			<input type="submit" class="btn btn-primary aligncenter" name="login" value="Login" id="loginbutton"/>
-		</form>
-	    </article>
+					<article>
+					<!--<h3>Contact Us : <br/></h3>-->
+					<form  method="post" action="#" th:action="@{/login}" th:object="${userbean}" id="signin">
+						<input type="text" th:field="*{username}" placeHolder="User Name" required="required"/>
+						<input type="password" th:field="*{password}" placeHolder="Password" required="required"/>
+						<br/>
+						<input type="submit" class="btn btn-primary aligncenter" name="login" value="Login" id="login"/>
+					</form>
+				    </article>
 	</aside>
 		</div>
 	
