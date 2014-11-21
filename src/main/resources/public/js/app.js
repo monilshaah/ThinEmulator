@@ -36,6 +36,8 @@ $(function() {
     					console.log(result);
     					alert("Some unexpected error occurred, Please try later");
     				}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
     			});
     		}  
     	});

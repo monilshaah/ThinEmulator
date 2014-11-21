@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class UserBean implements Serializable{
 
 	 /**
@@ -12,7 +14,8 @@ public class UserBean implements Serializable{
 	 */
 	private static final long serialVersionUID = -1299234524292338425L;
 
-	@NotNull
+		@NotNull
+		@NotEmpty
 	    @Size(max = 64)
 	     public String username;
 	    
@@ -20,6 +23,7 @@ public class UserBean implements Serializable{
 	    public String password;
 
 	    @NotNull
+	    @NotEmpty
 	    @Size(max = 64)
 	    public String email;
 	    
