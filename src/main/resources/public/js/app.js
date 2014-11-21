@@ -51,7 +51,7 @@ $(function() {
 		} else {
 			event.preventDefault();
     		$.ajax({
-    			url :$( '#signup' ).attr( 'action' ),
+    			url :$( '#signin' ).attr( 'action' ),
     			data :  JSON.stringify($('#signin').serializeObject()),
     			type : "POST",
     			contentType : "application/json",
