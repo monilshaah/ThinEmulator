@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.thinemulator.beans.SpringMongoConfig;
 import com.thinemulator.beans.UserBean;
 import com.thinemulator.utility.Config;
@@ -47,9 +48,20 @@ public class UserController extends SpringBootServletInitializer{
        return application.sources(Application.class);
    }*/
     
+	
+	@RequestMapping(value="/", method = RequestMethod.GET)
+	public String renderIndex(Model model) {
+		System.out.println("returning index file");
+		model.addAttribute("userbean", new UserBean());
+		return "index";
+	}
+	
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @ResponseBody
     public UserBean createUser(@RequestBody final UserBean user) throws Exception{
+    	System.out.println("username : "+user.username);
+    	System.out.println("password : "+user.password);
+    	System.out.println("email : "+user.email);
     	Query searchUserQuery = new Query(Criteria.where("username").is(user.username));
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
     	
@@ -63,7 +75,7 @@ public class UserController extends SpringBootServletInitializer{
     		tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
     		if(tempUser != null){
     			String EMAIL_AUTH_URL = Config.readProperties().getProperty("EMAIL_AUTH_URL");
-    			NotificationUtility.sendEmail(DataUtility.getHash(tempUser.toString()), EMAIL_AUTH_URL);
+    			NotificationUtility.sendEmail(DataUtility.getHash(tempUser.toString()), EMAIL_AUTH_URL, user);
     			return tempUser;
     		}
     		else{

@@ -1,17 +1,19 @@
-<!--  DOCTYPE html
-<html lang="en">
+  <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ThinEmulator an android emulator as a service">
-    <meta name="author" content="Thin Emulator Team">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="ThinEmulator an android emulator as a service"/>
+    <meta name="author" content="Thin Emulator Team"/>
+    </meta>
 <title>Thin Emulator</title>
-<script type="text/javascript" src="public/js/jquery.js"></script>
-<script type="text/javascript" src="public/js/bootstrap.js"></script>
+<script type="text/javascript" src="./js/jquery.js"></script>
+<script type="text/javascript" src="./js/bootstrap.js"></script>
+<script type="text/javascript" src="./js/app.js"></script>
 
-<link rel="stylesheet" type="text/css" href="public/css/bootstrap.css"></link>
-<link rel="stylesheet" type="text/css" href="public/css/bigdata.css"></link>
-<link rel="stylesheet" type="text/css" href="public/css/style.css"></link>
+<link rel="stylesheet" type="text/css" href="./css/bootstrap.css"></link>
+<link rel="stylesheet" type="text/css" href="./css/bigdata.css"></link>
+<link rel="stylesheet" type="text/css" href="./css/style.css"></link>
 <script type="text/javascript">
 $(document).ready(function(){
 			$('.carousel').carousel({
@@ -39,32 +41,32 @@ $(document).ready(function(){
 	<div class="customspan25 leftmenu">
 		<br/>
 		<div class=" well" >	
-	<form method="post" action="#">
-			<input type="text" name="first_name" placeHolder="First Name" required/>
-			<input type="text" name="last_name" placeHolder="Last Name" required/>
+	<form method="post" action="#" th:action="@{/signup}" th:object="${userbean}" id="signup">
+			<input type="text" th:field="*{username}" placeHolder="First Name" required="required"/>
+			<!-- <input type="text" name="last_name" placeHolder="Last Name" required/>
 			<select name="gender" placeHolder="Gender">
 				<option value="Male">Male</option>
 				<option value="Female">Female</option>
 			</select>
-			<input type="tel"  name="contact_number" placeHolder="Contact Number" required/>
-			<input type="email" name="email_address" placeHolder="Email Address"/>
-			<input type="text" name="city" placeHolder="City" required/>
-			<input type="text" name="state" placeHolder="State" required/>
-			<input type="password" name="password" placeHolder="password" required/>
-			<input type="password" name="confirm_password" placeHolder="Confirm password" required/>
+			<input type="tel"  name="contact_number" placeHolder="Contact Number" required/> -->
+			<input type="email" th:field="*{email}" placeHolder="Email Address"/>
+			<!-- <input type="text" name="city" placeHolder="City" required/>
+			<input type="text" name="state" placeHolder="State" required/> -->
+			<input type="password" th:field="*{password}" placeHolder="password" required="required"/>
+			<!-- <input type="password" name="confirm_password" placeHolder="Confirm password" required/> -->
 			<br/>
-			<input type="submit" class="btn btn-primary alignright" name="signup" value="Sign Up">
+			<input type="button" class="btn btn-primary alignright" name="signup" value="Sign Up" id="signupbutton"/>
 	</form>
 	</div>
 	</div>
 
-	<br>
+	<br/>
 	<div class="mainContent">
 	<div class="vertical">
 		<div class="customspan8 well">
 			<div id="myCarousel" class="carousel slide">
 				<div class="carousel-inner">
-				<div class="active item"><img src="public/img/image3.jpg"></img></div>
+				<div class="active item"><img src="./img/image3.jpg"></img></div>
 				<!--<div class="item"><img src="public/img/image2.jpg"></img></div>
 				<div class="item"><img src="public/img/image3.jpg"></img></div>-->
 			</div>
@@ -78,8 +80,8 @@ $(document).ready(function(){
 					<article>
 					<!--<h3>Contact Us : <br/></h3>-->
 					<form  method="post" action="#">
-						<input type="email" name="email_id" placeHolder="Email Id" required/>
-						<input type="password" name="password" placeHolder="Password" required/>
+						<input type="email" name="email_id" placeHolder="Email Id" required="required"/>
+						<input type="password" name="password" placeHolder="Password" required="required"/>
 						<br/>
 						<input type="submit" class="btn btn-primary aligncenter" name="login" value="Login"/>
 					</form>
@@ -121,8 +123,6 @@ $(document).ready(function(){
 			</div>	
 		</div>
 	</div>
-</div>
 </body>
 </html>
 
--->
