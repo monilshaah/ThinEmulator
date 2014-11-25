@@ -70,8 +70,8 @@ $(document).ready(function(){
 			<div id="collapseTwo" class="accordion-body collapse in">
 				<div class="accordion-inner">
 					<ul class="nav nav-pills nav-stacked">
-						<li><a class="buttons" href="#" onclick="loadcreatenew()">Create New</a></li>
-						<li><a class="buttons" href="#" onclick="loadconfigureddevices()">Emulators</a></li>
+						<li><a class="buttons" href="#" th:attr="onclick='javascript:loadcreatenew(\''+${username}+'\')'">Create New</a></li>
+						<li><a class="buttons" href="#" th:attr="onclick='javascript:loadconfigureddevices(\''+${username}+'\')'">Emulators</a></li>
 					</ul>
 				</div>
 			</div>
@@ -82,8 +82,8 @@ $(document).ready(function(){
 	</div>-->
 	</div>
 	<div class="span5 well" th:fragment="listdeviceoptions" th:unless="${#lists.isEmpty(models)}">
-	<form>
-	<input type="text" placeHolder="Name of device" name="devicename"></input>
+	<form method="post" id="createnew" th:object="${user}" th:action="${username}">
+	<input type="text" placeHolder="Name of device" name="devicename" required="required"></input>
 	<select>
 	<option th:each="model : ${models}" name="devicetype" th:text="${model.name}" th:id="${model.id}">nexus-5</option>
 	<!-- <option name="devicetype" th:text="#{models.name}" th:id="#{models.id}">nexus-4</option>
@@ -91,7 +91,7 @@ $(document).ready(function(){
 	<option name="devicetype" th:text="#{models.name}" th:id="#{models.id}">nexus-S</option> -->
 	</select>
 	<br/>
-	<input type="submit" class="btn btn-primary alignright" placeHolder="Name of device" name="Create"></input>
+	<input type="submit" class="btn btn-primary alignright" value="create" name="createnew" id="create"></input>
 	</form>
 	</div>
 	
@@ -100,10 +100,12 @@ $(document).ready(function(){
 	<table class="table table-striped table-bordered table-hover" >
 	<th class="lead">Name</th>
 	<th class="lead">Status</th>
+	<th class="lead">Device Type</th>
 	<!--  <th class="lead">Operation</th> -->
-	<tr th:each="model : ${models}" th:attr="onclick='javascript:emulatordetails(\''+${model.id}+'\', \''+${model.configName}+'\', \''+${model.status}+'\')'">
+	<tr th:each="model : ${models}" th:attr="onclick='javascript:emulatordetails(\''+${model.id}+'\', \''+${model.configName}+'\', \''+${model.status}+'\', \''+${model.deviceType}+'\')'">
 	<td th:text="${model.configName}">Name of device</td>
 	<td th:text="${model.status}">Status</td>
+	<td th:text="${model.deviceType}">Type</td>
 	<!-- <td th:attr="onclick='javascript:deleteConfig(\''+${model.id}+'\')'"><i class="icon-remove-sign"></i>Remove</td> -->
 	</tr>
 	<!--<option th:each="model : ${models}" name="devicetype" th:text="${model.name}" th:id="${model.id}">nexus-5</option>

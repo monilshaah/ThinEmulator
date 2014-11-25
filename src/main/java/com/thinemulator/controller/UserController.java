@@ -15,6 +15,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -76,23 +77,52 @@ public class UserController extends SpringBootServletInitializer{
 		model.addAttribute("user", user);
 		return "home";
 	}
-	@RequestMapping(value="/loadnewdeviceform", method = RequestMethod.GET)
-	public String renderLoadNewDeviceForm(Model model) {
+	
+	@RequestMapping(value="/loadnewdeviceform/{username}", method = RequestMethod.GET)
+	public String renderLoadNewDeviceForm(@PathVariable String username, Model model) {
 		List<Devices> devices = new ArrayList<Devices>();
 		devices.add(new Devices("Nexus-4","Nexus-4"));
 		devices.add(new Devices("Nexus-5","Nexus-5"));
 		devices.add(new Devices("Nexus-7","7"));
 		model.addAttribute("models", devices);
+	
+		Query searchUserQuery = new Query(Criteria.where("username").is(username));
+		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
+		System.out.println(user.toString());
+		model.addAttribute("user", user);
+		return "createnewfragement :: listdeviceoptions";
+	}
+	
+	@RequestMapping(value="/createnewdevice/{username}", method = RequestMethod.POST)
+	public String createNewDevice(@RequestBody DeviceConfig deviceConfig,@PathVariable String username, Model model) {
+		
+		Query searchUserQuery = new Query(Criteria.where("username").is(username));
+		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
+		System.out.println(user.toString());
+		Update update = new Update();
+		update.push("userDevices", deviceConfig);
+		mongoOperation.updateFirst(searchUserQuery, update, UserBean.class);
+		
+		/*List<Devices> devices = new ArrayList<Devices>();
+		devices.add(new Devices("Nexus-4","Nexus-4"));
+		devices.add(new Devices("Nexus-5","Nexus-5"));
+		devices.add(new Devices("Nexus-7","7"));
+		model.addAttribute("models", devices);*/
 		return "home :: listdeviceoptions";
 	}
 	
-	@RequestMapping(value="/loadconfigureddevices", method = RequestMethod.GET)
-	public String renderExistingConfigs(Model model) {
+	
+	@RequestMapping(value="/loadconfigureddevices/{username}", method = RequestMethod.GET)
+	public String renderExistingConfigs(@PathVariable String username, Model model) {
+		Query searchUserQuery = new Query(Criteria.where("username").is(username));
+		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
+		System.out.println(user.toString());
+		//TODO : return actual database devices and status
 		List<DeviceConfig> devices = new ArrayList<DeviceConfig>();
 		devices.add(new DeviceConfig("First Application","Running"));
 		devices.add(new DeviceConfig("Second Application testing","Running"));
 		devices.add(new DeviceConfig("Third Application test case suit automation under test","In-Progress"));
-		model.addAttribute("models", devices);
+		model.addAttribute("models", user.getConfigDevices());
 		return "home :: usersavedconfigs";
 	}
 	

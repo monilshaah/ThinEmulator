@@ -74,23 +74,74 @@ $(function() {
     });
 });
 
+$(function() {
+    $('#createnew').submit(function(event) {
+    	if(!this.checkValidity())
+    		{
+    			console.log("failed in validation");
+  				event.preventDefault();
+				return false;
+			} else {
+			console.log("validation successful");
+				event.preventDefault();
+    			$.ajax({
+    				url : "/createnewdevice/"+$( '#createnew' ).attr( 'action' ),
+    				data :  JSON.stringify($('#createnew').serializeObject()),
+    				type : "POST",
+    				contentType : "application/json",
+    				success: function(result) {
+    					console.log(result);
+    				},
+    				failure : function(result) {
+    					console.log(result);
+    					alert("Some unexpected error occurred, Please try later");
+    				}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
+    		}  
+    	});
+});
 
-function loadcreatenew() {
-    var url = '/loadnewdeviceform';
+
+function createnewdevice() {
+$.ajax({
+    				url : "/createnewdevice/"+$( '#createnew' ).attr( 'action' ),
+    				data :  JSON.stringify($('#createnew').serializeObject()),
+    				type : "POST",
+    				contentType : "application/json",
+    				success: function(result) {
+    					loadconfigureddevices($( '#createnew' ).attr( 'action' ));
+    				},
+    				failure : function(result) {
+    					console.log(result);
+    					alert("Some unexpected error occurred, Please try later");
+    				}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
+}
+function loadcreatenew(username) {
+ var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = "./../js/createnewconfig.js";
+    head.appendChild(script);
+    var url = '/loadnewdeviceform/'+username;
     
     document.getElementById("emulatordetails").innerHTML = "";
     
     $("#placeholder").hide().load(url).slideDown( "slow" ).fadeIn(500);
 }
 
-function loadconfigureddevices() {
-    var url = '/loadconfigureddevices';
+function loadconfigureddevices(username) {
+    var url = '/loadconfigureddevices/'+username;
     
     document.getElementById("emulatordetails").innerHTML = "";
     
     $("#placeholder").hide().load(url).slideDown( "slow" ).fadeIn(500);
 }
-function emulatordetails(id, name, status) {
+function emulatordetails(id, name, status, deviceType) {
 // Adding the script tag to the head as suggested before
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
@@ -100,6 +151,7 @@ function emulatordetails(id, name, status) {
 	var htmlelements =	"<div class='customspan35 well'>"+
 					"<p> <b>Emulator Name :</b> <span style='word-wrap: break-word; width: 10%'>"+name+"</span>"+
 					"<br/><br/><b> Status :</b> "+status+
+					"<br/><br/><b> Device Type :</b> "+deviceType+
 					"</p>"+
 					"<form enctype='multipart/form-data' name='fileinfo'>"+
 					"Upload APK file : <input type='file' name='file'><br /> "+

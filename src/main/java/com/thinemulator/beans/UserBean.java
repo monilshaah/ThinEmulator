@@ -1,11 +1,14 @@
 package com.thinemulator.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.thinemulator.controller.DeviceConfig;
 
 public class UserBean implements Serializable{
 
@@ -13,7 +16,8 @@ public class UserBean implements Serializable{
 	 * Generated serial version UID
 	 */
 	private static final long serialVersionUID = -1299234524292338425L;
-
+		ArrayList<DeviceConfig> userDevices = new ArrayList<DeviceConfig>();
+		
 		@NotNull
 		@NotEmpty
 	    @Size(max = 64)
@@ -51,10 +55,19 @@ public class UserBean implements Serializable{
 	    	return this.password;
 	    }
 	    
+	    public void addNewDevice(DeviceConfig deviceConfig){
+	    	userDevices.add(deviceConfig);
+	    }
+	    
+	    public ArrayList<DeviceConfig> getConfigDevices() {
+	    	return userDevices;
+	    }
+	    
 	    @Override
 	    public String toString() {
 	    	return "\"username\":\""+username+"\","
 	    			+"\"email\":\""+email+"\""
 	    			;
 	    }
+	    
 }
