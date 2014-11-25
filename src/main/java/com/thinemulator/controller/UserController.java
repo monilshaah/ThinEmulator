@@ -1,5 +1,11 @@
 package com.thinemulator.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
@@ -11,12 +17,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.BasicDBObject;
 import com.thinemulator.beans.SpringMongoConfig;
@@ -61,6 +68,34 @@ public class UserController extends SpringBootServletInitializer{
 		return "signupsuccess";
 	}
 	
+	@RequestMapping(value="/home/{username}", method = RequestMethod.GET)
+	public String renderHome(@PathVariable String username, Model model) {
+		Query searchUserQuery = new Query(Criteria.where("username").is(username));
+		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
+		System.out.println(user.toString());
+		model.addAttribute("user", user);
+		return "home";
+	}
+	@RequestMapping(value="/loadnewdeviceform", method = RequestMethod.GET)
+	public String renderLoadNewDeviceForm(Model model) {
+		List<Devices> devices = new ArrayList<Devices>();
+		devices.add(new Devices("Nexus-4","Nexus-4"));
+		devices.add(new Devices("Nexus-5","Nexus-5"));
+		devices.add(new Devices("Nexus-7","7"));
+		model.addAttribute("models", devices);
+		return "home :: listdeviceoptions";
+	}
+	
+	@RequestMapping(value="/loadconfigureddevices", method = RequestMethod.GET)
+	public String renderExistingConfigs(Model model) {
+		List<DeviceConfig> devices = new ArrayList<DeviceConfig>();
+		devices.add(new DeviceConfig("First Application","Running"));
+		devices.add(new DeviceConfig("Second Application testing","Running"));
+		devices.add(new DeviceConfig("Third Application test case suit automation under test","In-Progress"));
+		model.addAttribute("models", devices);
+		return "home :: usersavedconfigs";
+	}
+	
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @ResponseBody
     public UserBean createUser(@RequestBody final UserBean user) throws Exception{
@@ -90,6 +125,29 @@ public class UserController extends SpringBootServletInitializer{
     		}
     	}
     }
+    
+    
+    @RequestMapping(value="/upload", method=RequestMethod.POST)
+    public @ResponseBody String handleFileUpload(@RequestParam("name") String name,
+            @RequestParam("file") MultipartFile file){
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream(new File(name + "-uploaded")));
+                stream.write(bytes);
+                stream.close();
+                System.out.println( "You successfully uploaded " + name + " into " + name + "-uploaded !");
+                return "You successfully uploaded "+name;
+            } catch (Exception e) {
+            	 System.out.println( "You failed to upload " + name + " => " + e.getMessage());
+            	 return "ailed to upload " + name ;
+            }
+        } else {
+        	 System.out.println("You failed to upload " + name + " because the file was empty.");
+        	 return "ailed to upload " + name ;
+        }
+    }
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public @ResponseBody String Login(@RequestBody final UserBean user) throws Exception{
     	String pwd = DataUtility.getHash(user.password);
@@ -98,8 +156,12 @@ public class UserController extends SpringBootServletInitializer{
     	Query searchUserQuery = new Query(Criteria.where("username").is(user.username).and("password").is(user.password) );
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
     	System.out.println("USER LOGGED IN : "+tempUser);
+    	
     	if(null!=tempUser) {
-    		return "{\"success\":\"true\"}";	
+    		String successfulLoginResponse = tempUser.toString();
+    		return "{\"success\":\"true\","
+    				+ successfulLoginResponse
+    				+"}";
     	} else {
     		return "{\"success\":\"false\"}";
     	}

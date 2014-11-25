@@ -44,10 +44,16 @@ a img {
 }
 
 a:link, a:visited {
-	color: #CF5C3F;
+	color: #0088cc;
 	padding: 0 1px;
 	text-decoration: none;
 }
+.buttons {
+	color: #0088cc;
+	padding: 0 1px;
+	text-decoration: none;
+}
+
 
 a:hover, a:active {
 	background-color: #CF5C3F;

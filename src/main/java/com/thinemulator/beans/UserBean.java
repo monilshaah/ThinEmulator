@@ -50,4 +50,11 @@ public class UserBean implements Serializable{
 	    public String getPassword() {
 	    	return this.password;
 	    }
+	    
+	    @Override
+	    public String toString() {
+	    	return "\"username\":\""+username+"\","
+	    			+"\"email\":\""+email+"\""
+	    			;
+	    }
 }
