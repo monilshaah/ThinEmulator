@@ -86,7 +86,7 @@ function loadcreatenew() {
 function loadconfigureddevices() {
     var url = '/loadconfigureddevices';
     
-    
+    document.getElementById("emulatordetails").innerHTML = "";
     
     $("#placeholder").hide().load(url).slideDown( "slow" ).fadeIn(500);
 }
@@ -109,5 +109,4 @@ function emulatordetails(id, name, status) {
 					"<div id='output'></div>"+
 					"</div>";
 					document.getElementById("emulatordetails").innerHTML = htmlelements;
-					
 }
