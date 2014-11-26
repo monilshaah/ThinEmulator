@@ -1,30 +1,46 @@
 package com.thinemulator.utility;
 
-import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Properties;
 
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+import com.thinemulator.beans.UserBean;
+
 
 public class NotificationUtility {
 
-	public static void sendEmail(String hash,  String url){
+	public static void sendEmail(String hash,  String url, UserBean user){
+		
+		Properties properties = Config.readProperties();
 		// Host server to send email
-		String SMTP_HOST = Config.readProperties().getProperty("SMTP_HOST");
+
+		String SMTP_HOST = properties.getProperty("SMTP_HOST");
+
      	// Sender's email address
-        String FROM_ADDRESS = Config.readProperties().getProperty("FROM_ADDRESS"); 
+        String FROM_ADDRESS = properties.getProperty("FROM_ADDRESS"); 
+
         // Name of the sender 
-        String FROM_NAME = Config.readProperties().getProperty("FROM_NAME");  
+        String FROM_NAME = properties.getProperty("FROM_NAME");  
+
         // Receiver's email address
-        String TO_ADDRESS = Config.readProperties().getProperty("TO_ADDRESS");
+        String TO_ADDRESS = user.email;
+        
+        String SMTP_PORT = properties.getProperty("SMTP_PORT");
+
        
         try {  
             Properties props = new Properties();  
             props.put("mail.smtp.host", SMTP_HOST);  
             props.put("mail.smtp.auth", "true");  
             props.put("mail.debug", "false");  
-            props.put("mail.smtp.ssl.enable", "true");  
+            props.put("mail.smtp.ssl.enable", "false");  
+            props.put("mail.smtp.port",SMTP_PORT);
   
             Session session = Session.getInstance(props, new SocialAuth());  
             Message msg = new MimeMessage(session);  

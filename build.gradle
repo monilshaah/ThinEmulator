@@ -33,7 +33,19 @@ dependencies {
     compile("commons-io:commons-io:2.4")
 	compile("javax.mail:mail:1.4.1")
     compile("org.json:json:20140107")
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+	compile("org.codehaus.jackson:jackson-core-asl:1.1.0")
+	compile("com.fasterxml.jackson.core:jackson-annotations:2.2.1")
+	compile("com.fasterxml.jackson.core:jackson-databind:2.0.0")
     testCompile("org.springframework.boot:spring-boot-starter-test")
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDir ("src/main/java/com/userinterface")
+		}
+	}
 }
 
 eclipse {

@@ -1,6 +1,6 @@
 package com.thinemulator.utility;
 
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -13,7 +13,7 @@ public class Config {
             try {
                 properties = readPropertyValues();
             } catch (IOException e) {
-                System.exit(-10); // Just fail if can't read properties
+                System.out.println("ERROR reading configurations"); // Just fail if can't read properties
             }
         }
         return properties;
@@ -21,14 +21,9 @@ public class Config {
 
     private static Properties readPropertyValues() throws IOException {
         Properties properties = new Properties();
-        String propFileName = "ThinEmulator.properties";
-
-        InputStream inputStream = Config.class.getClassLoader().getResourceAsStream(propFileName);
-        properties.load(inputStream);
-        if (null == inputStream) {
-            throw new FileNotFoundException("Property file '" + propFileName + "' not found in the classpath");
-        }
-
+        String userDir = System.getProperty("user.dir");
+		InputStream inputProperties = new FileInputStream(userDir + "/ThinEmulator.properties");
+        properties.load(inputProperties);
         return properties;
     }
 }

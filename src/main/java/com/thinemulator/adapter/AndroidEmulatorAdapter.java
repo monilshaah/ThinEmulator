@@ -1,31 +1,32 @@
 package com.thinemulator.adapter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.Properties;
 
 import com.thinemulator.beans.AndroidEmulator;
 import com.thinemulator.utility.Config;
 
 public class AndroidEmulatorAdapter {
-	public static final String ANDRIOD_SDK_ADDRESS = Config.readProperties().getProperty("ANDRIOD_SDK_ADDRESS");
-	public static final String ANDROID_ADDRESS = Config.readProperties().getProperty("ANDROID_ADDRESS");
-	public static final String EMULATOR_ADDRESS = Config.readProperties().getProperty("EMULATOR_ADDRESS");
-	public static final String ANDROID_ADB_PATH = Config.readProperties().getProperty("ANDROID_ADB_PATH");
-	public static final String CREATE_ANDROID = Config.readProperties().getProperty("CREATE_ANDROID");
-	public static final String DELETE_ANDROID = Config.readProperties().getProperty("DELETE_ANDROID");
-	public static final String DEVICE_DEFINITION = Config.readProperties().getProperty("DEVICE_DEFINITION");
-	public static final String ANDROID_AVD = Config.readProperties().getProperty("ANDROID_AVD");
-	public static final String CREATE_ANDROID_TARGET = Config.readProperties().getProperty("CREATE_ANDROID_TARGET");
-	public static final String CREATE_ANDROID_PATH = Config.readProperties().getProperty("CREATE_ANDROID_PATH");
-	public static final String WAIT_FOR_ADB = Config.readProperties().getProperty("WAIT_FOR_ADB");
-	public static final String GET_DEVICES = Config.readProperties().getProperty("GET_DEVICES");
-	public static final String DEVICE_STATUS = Config.readProperties().getProperty("DEVICE_STATUS");
-	public static final String GET_DEVICE_STATUS_COMMAND = Config.readProperties().getProperty("GET_DEVICE_STATUS_COMMAND");
-	public static final String INSTALL_COMMAND = Config.readProperties().getProperty("INSTALL_COMMAND");
-	public static final String ANDROID_APK_FILE = Config.readProperties().getProperty("ANDROID_APK_FILE");
-	public static final String START_ACTIVITY_VIEW = Config.readProperties().getProperty("START_ACTIVITY_VIEW");
+	static Properties properties = Config.readProperties();
+	public static final String ANDRIOD_SDK_ADDRESS = properties.getProperty("ANDRIOD_SDK_ADDRESS");
+	public static final String ANDROID_ADDRESS = properties.getProperty("ANDROID_ADDRESS");
+	public static final String EMULATOR_ADDRESS = properties.getProperty("EMULATOR_ADDRESS");
+	public static final String ANDROID_ADB_PATH = properties.getProperty("ANDROID_ADB_PATH");
+	public static final String CREATE_ANDROID = properties.getProperty("CREATE_ANDROID");
+	public static final String DELETE_ANDROID = properties.getProperty("DELETE_ANDROID");
+	public static final String DEVICE_DEFINITION = properties.getProperty("DEVICE_DEFINITION");
+	public static final String ANDROID_AVD = properties.getProperty("ANDROID_AVD");
+	public static final String CREATE_ANDROID_TARGET = properties.getProperty("CREATE_ANDROID_TARGET");
+	public static final String CREATE_ANDROID_PATH = properties.getProperty("CREATE_ANDROID_PATH");
+	public static final String WAIT_FOR_ADB = properties.getProperty("WAIT_FOR_ADB");
+	public static final String GET_DEVICES = properties.getProperty("GET_DEVICES");
+	public static final String DEVICE_STATUS = properties.getProperty("DEVICE_STATUS");
+	public static final String GET_DEVICE_STATUS_COMMAND = properties.getProperty("GET_DEVICE_STATUS_COMMAND");
+	public static final String INSTALL_COMMAND = properties.getProperty("INSTALL_COMMAND");
+	public static final String ANDROID_APK_FILE = properties.getProperty("ANDROID_APK_FILE");
+	public static final String START_ACTIVITY_VIEW = properties.getProperty("START_ACTIVITY_VIEW");
+
+	
 
 	/**
 	 * emulatorName : name the emulator which you want to create

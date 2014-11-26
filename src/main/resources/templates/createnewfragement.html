@@ -1,0 +1,26 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+   
+    <body>
+       
+       <div layout:fragment="script"></div>
+    
+
+<div class="span5 well" th:fragment="listdeviceoptions" th:unless="${#lists.isEmpty(models)}">
+	<script type="text/javascript" th:src="@{./../js/createnewconfig.js}"></script>
+	<form method="post" id="createnew" th:object="${user}" th:action="${username}">
+	<input type="text" placeHolder="Name of device" name="configName" required="required"></input>
+	<select name="deviceType">
+	<option th:each="model : ${models}" th:text="${model.name}" th:id="${model.id}">nexus-5</option>
+	<!-- <option name="devicetype" th:text="#{models.name}" th:id="#{models.id}">nexus-4</option>
+	<option name="devicetype" th:text="#{models.name}" th:id="#{models.id}">nexus-3</option>
+	<option name="devicetype" th:text="#{models.name}" th:id="#{models.id}">nexus-S</option> -->
+	</select>
+	<br/>
+	<input type="button" onclick="createnewdevice()" class="btn btn-primary alignright" value="create" name="createnew" id="create"></input>
+	</form>
+	</div>
+	
+	</body>
+</html>
