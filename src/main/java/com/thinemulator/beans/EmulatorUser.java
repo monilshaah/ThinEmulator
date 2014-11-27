@@ -1,3 +1,7 @@
+/**
+ * This is deprecated class. Do not use.
+ */
+
 package com.thinemulator.beans;
 
 import java.util.List;
@@ -6,6 +10,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
+/**
+ * This is deprecated class. Do not use.
+ */
 public class EmulatorUser {
 	@Id
 	private String userId;

@@ -1,10 +1,18 @@
 package com.thinemulator.beans;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+/**
+ * Represents emulator configuration 
+ *
+ */
+@Document(collection = "devices")
 public class AndroidEmulator {
 	
 	@NotBlank(message = "emulatorName can not be empty")
+	@Id
 	private String emulatorName;
 	
 	@NotBlank(message = "emulatorTargetId can not be empty") 

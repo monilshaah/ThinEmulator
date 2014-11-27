@@ -122,7 +122,7 @@ public class UserController extends SpringBootServletInitializer{
 		devices.add(new DeviceConfig("First Application","Running"));
 		devices.add(new DeviceConfig("Second Application testing","Running"));
 		devices.add(new DeviceConfig("Third Application test case suit automation under test","In-Progress"));
-		model.addAttribute("models", user.getConfigDevices());
+		model.addAttribute("models", user.getEmulatorList());
 		return "home :: usersavedconfigs";
 	}
 	

@@ -3,31 +3,32 @@ package com.thinemulator.beans;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.thinemulator.controller.DeviceConfig;
 
+@Document(collection = "users")
 public class UserBean implements Serializable{
 
 	 /**
 	 * Generated serial version UID
 	 */
 	private static final long serialVersionUID = -1299234524292338425L;
-		ArrayList<DeviceConfig> userDevices = new ArrayList<DeviceConfig>();
+		ArrayList<DeviceConfig> emulatorList = new ArrayList<DeviceConfig>();
 		
-		@NotNull
-		@NotEmpty
+		@NotBlank
 	    @Size(max = 64)
+		@Id
 	     public String username;
 	    
 	    @Size(max = 64)
 	    public String password;
 
-	    @NotNull
-	    @NotEmpty
+	    @NotBlank
 	    @Size(max = 64)
 	    public String email;
 	    
@@ -55,12 +56,12 @@ public class UserBean implements Serializable{
 	    	return this.password;
 	    }
 	    
-	    public void addNewDevice(DeviceConfig deviceConfig){
-	    	userDevices.add(deviceConfig);
+	    public void setEmulatorList(DeviceConfig deviceConfig){
+	    	emulatorList.add(deviceConfig);
 	    }
 	    
-	    public ArrayList<DeviceConfig> getConfigDevices() {
-	    	return userDevices;
+	    public ArrayList<DeviceConfig> getEmulatorList() {
+	    	return emulatorList;
 	    }
 	    
 	    @Override
