@@ -57,7 +57,7 @@ public class EmulatorController {
  	 * @return operation status and errors if any as JSON
  	 */
  	@RequestMapping(value = "/emulators", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
- 	public ResponseEntity<Map<String,String>> createUserAndroidEmulator(@PathVariable String userId, @RequestBody DeviceConfig newDeviceConfig, BindingResult validationResult){
+ 	public ResponseEntity<Map<String,String>> createUserAndroidEmulator(@PathVariable String userId, @RequestBody DeviceConfig newDeviceConfig, BindingResult validationResult) {
  		HttpStatus createdStatus;
  		Map<String, String> responseBody = new HashMap<String, String>();
  		if (validationResult.hasErrors()) {
@@ -73,6 +73,7 @@ public class EmulatorController {
  			responseBody.put("errors", errors);
  		} else {
  			AndroidEmulator newAndroidEmulator = mongoDBAdapter.getDevice(newDeviceConfig.getDeviceType());
+ 			androidEmulatorAdapter.createEmulator(newDeviceConfig.getDeviceName(),newAndroidEmulator.getEmulatorTargetId(),newAndroidEmulator.getEmulatorDeviceId());
  			String opStatus = mongoDBAdapter.addEmulator(userId, newDeviceConfig);
  			//TODO check status of operation
  			if (opStatus.equals("success")) {
@@ -83,7 +84,6 @@ public class EmulatorController {
  				responseBody.put("success", "false");
  				responseBody.put("errors", opStatus);
  			}
- 			androidEmulatorAdapter.createEmulator(newAndroidEmulator);
  		}
  		return new ResponseEntity<Map<String,String>>(responseBody, new HttpHeaders(), createdStatus);
  	}
@@ -131,6 +131,7 @@ public class EmulatorController {
  	public ResponseEntity<Map<String,String>> stopUserAndroidEmulator(@PathVariable String emulatorName) {
  		Map<String, String> responseBody = new HashMap<String, String>();
  		//TODO Follow startUserAndroidEmulator approach for addressing emulators
+ 		//TODO Stop multiple instance of same emulator
  		Process emulatorProcess = ThinEmulatorApp.runningAndroidEmulator.get(emulatorName);
  		if (emulatorProcess != null) {
  			emulatorProcess.destroy();

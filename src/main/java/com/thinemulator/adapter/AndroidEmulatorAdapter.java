@@ -9,14 +9,14 @@ import com.thinemulator.utility.Config;
 public class AndroidEmulatorAdapter {
 	static Properties properties = Config.readProperties();
 	public static final String ANDRIOD_SDK_ADDRESS = properties.getProperty("ANDRIOD_SDK_ADDRESS");
-	public static final String ANDROID_ADDRESS = properties.getProperty("ANDROID_ADDRESS");
-	public static final String EMULATOR_ADDRESS = properties.getProperty("EMULATOR_ADDRESS");
-	public static final String ANDROID_ADB_PATH = properties.getProperty("ANDROID_ADB_PATH");
-	public static final String CREATE_ANDROID = properties.getProperty("CREATE_ANDROID");
-	public static final String DELETE_ANDROID = properties.getProperty("DELETE_ANDROID");
-	public static final String DEVICE_DEFINITION = properties.getProperty("DEVICE_DEFINITION");
-	public static final String ANDROID_AVD = properties.getProperty("ANDROID_AVD");
-	public static final String CREATE_ANDROID_TARGET = properties.getProperty("CREATE_ANDROID_TARGET");
+	public static final String ANDROID_ADDRESS = properties.getProperty("ANDROID_ADDRESS").concat(" ");
+	public static final String EMULATOR_ADDRESS = properties.getProperty("EMULATOR_ADDRESS").concat(" ");
+	public static final String ANDROID_ADB_PATH = properties.getProperty("ANDROID_ADB_PATH").concat(" ");
+	public static final String CREATE_ANDROID = properties.getProperty("CREATE_ANDROID").concat(" ");
+	public static final String DELETE_ANDROID = properties.getProperty("DELETE_ANDROID").concat(" ");
+	public static final String DEVICE_DEFINITION = " ".concat(properties.getProperty("DEVICE_DEFINITION")).concat(" ");
+	public static final String ANDROID_AVD = properties.getProperty("ANDROID_AVD").concat(" ");
+	public static final String CREATE_ANDROID_TARGET = " ".concat(properties.getProperty("CREATE_ANDROID_TARGET")).concat(" ");
 	public static final String CREATE_ANDROID_PATH = properties.getProperty("CREATE_ANDROID_PATH");
 	public static final String WAIT_FOR_ADB = properties.getProperty("WAIT_FOR_ADB");
 	public static final String GET_DEVICES = properties.getProperty("GET_DEVICES");
@@ -36,11 +36,12 @@ public class AndroidEmulatorAdapter {
 	 * @param targetId
 	 * @throws IOException
 	 */
-	public void createEmulator(AndroidEmulator newEmulator) {
+	//public void createEmulator(AndroidEmulator newEmulator) {
+	public void createEmulator(String deviceName, String targetId, String deviceId) {
 		Runtime runTime = Runtime.getRuntime();
 		try {
-		System.out.println(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(newEmulator.getEmulatorName()).concat(CREATE_ANDROID_TARGET).concat(newEmulator.getEmulatorTargetId()).concat(DEVICE_DEFINITION).concat(newEmulator.getEmulatorDeviceId()));
-		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(newEmulator.getEmulatorName()).concat(CREATE_ANDROID_TARGET).concat(newEmulator.getEmulatorTargetId()).concat(DEVICE_DEFINITION).concat(newEmulator.getEmulatorDeviceId()));
+		System.out.println(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(deviceName).concat(CREATE_ANDROID_TARGET).concat(targetId).concat(DEVICE_DEFINITION).concat(deviceId));
+		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(deviceName).concat(CREATE_ANDROID_TARGET).concat(targetId).concat(DEVICE_DEFINITION).concat(deviceId));
 		/* InputStream stderr = launchEmulatorProcess.getErrorStream();
          InputStreamReader isr = new InputStreamReader(stderr);
          BufferedReader br = new BufferedReader(isr);
