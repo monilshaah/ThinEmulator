@@ -72,7 +72,9 @@ public class EmulatorController {
  			responseBody.put("success", "false");
  			responseBody.put("errors", errors);
  		} else {
+ 			System.out.println("New device config type : "+newDeviceConfig.getDeviceType());
  			AndroidEmulator newAndroidEmulator = mongoDBAdapter.getDevice(newDeviceConfig.getDeviceType());
+ 			System.out.println("New device target id : "+newAndroidEmulator);
  			androidEmulatorAdapter.createEmulator(newDeviceConfig.getDeviceName(),newAndroidEmulator.getEmulatorTargetId(),newAndroidEmulator.getEmulatorDeviceId());
  			String opStatus = mongoDBAdapter.addEmulator(userId, newDeviceConfig);
  			//TODO check status of operation

@@ -79,18 +79,20 @@ public class UserController extends SpringBootServletInitializer{
 	}
 	
 	@RequestMapping(value="/loadnewdeviceform/{username}", method = RequestMethod.GET)
-	public String renderLoadNewDeviceForm(@PathVariable String username, Model model) {
-		List<Devices> devices = new ArrayList<Devices>();
+	public @ResponseBody List<Devices> renderLoadNewDeviceForm(@PathVariable String username) {
+		/*List<Devices> devices = new ArrayList<Devices>();
 		devices.add(new Devices("Nexus-4","Nexus-4"));
 		devices.add(new Devices("Nexus-5","Nexus-5"));
 		devices.add(new Devices("Nexus-7","7"));
 		model.addAttribute("models", devices);
-	
-		Query searchUserQuery = new Query(Criteria.where("username").is(username));
-		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
-		System.out.println(user.toString());
-		model.addAttribute("user", user);
-		return "createnewfragement :: listdeviceoptions";
+	*/
+		//Query searchUserQuery = new Query(Criteria.where("username").is(username));
+		//UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
+		ArrayList<Devices> device = (ArrayList<Devices>) mongoOperation.findAll(Devices.class);
+		//model.addAttribute("user", user);
+		
+		return device;
+		//return "createnewfragement :: listdeviceoptions";
 	}
 	
 	@RequestMapping(value="/createnewdevice/{username}", method = RequestMethod.POST)
@@ -164,10 +166,10 @@ public class UserController extends SpringBootServletInitializer{
             try {
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File(name + "-uploaded")));
+                        new BufferedOutputStream(new FileOutputStream(new File(name)));
                 stream.write(bytes);
                 stream.close();
-                System.out.println( "You successfully uploaded " + name + " into " + name + "-uploaded !");
+                System.out.println( "You successfully uploaded " + name + " into " + name);
                 return "You successfully uploaded "+name;
             } catch (Exception e) {
             	 System.out.println( "You failed to upload " + name + " => " + e.getMessage());
@@ -183,7 +185,9 @@ public class UserController extends SpringBootServletInitializer{
     	String pwd = DataUtility.getHash(user.password);
     	BasicDBObject query = new BasicDBObject("username", user.username)
         						.append("password", pwd);
-    	Query searchUserQuery = new Query(Criteria.where("username").is(user.username).and("password").is(user.password) );
+    	System.out.println("User name : "+user.username);
+    	System.out.println("Password : "+user.password);
+    	Query searchUserQuery = new Query(Criteria.where("_id").is(user.username).and("password").is(user.password) );
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
     	System.out.println("USER LOGGED IN : "+tempUser);
     	

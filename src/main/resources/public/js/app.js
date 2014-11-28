@@ -106,7 +106,7 @@ $(function() {
 
 function createnewdevice() {
 $.ajax({
-    				url : "/createnewdevice/"+$( '#createnew' ).attr( 'action' ),
+    				url : "/users/"+$( '#createnew' ).attr( 'action' )+"/emulators",
     				data :  JSON.stringify($('#createnew').serializeObject()),
     				type : "POST",
     				contentType : "application/json",
@@ -122,7 +122,7 @@ $.ajax({
     			});
 }
 function loadcreatenew(username) {
- var head = document.getElementsByTagName('head')[0];
+ 	var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = "./../js/createnewconfig.js";
@@ -130,18 +130,55 @@ function loadcreatenew(username) {
     var url = '/loadnewdeviceform/'+username;
     
     document.getElementById("emulatordetails").innerHTML = "";
+    console.log(url);
     
-    $("#placeholder").hide().load(url).slideDown( "slow" ).fadeIn(500);
+    $.ajax({
+    			url : url,
+    			data :  JSON.stringify($('#createnew').serializeObject()),
+    			type : "GET",
+    			contentType : "application/json",
+    			success: function(result) {
+    				$("#placeholder").html(
+    				$("#createnewemulator").render({result:result,username:username})
+    			)},
+    			failure : function(result) {
+    				console.log(result);
+    				alert("Some unexpected error occurred, Please try later");
+    			}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
+    
+    //$("#placeholder").hide().load(url).slideDown( "slow" ).fadeIn(500);
 }
 
 function loadconfigureddevices(username) {
-    var url = '/loadconfigureddevices/'+username;
+    var url = "/users/"+username+"/emulators";
     
     document.getElementById("emulatordetails").innerHTML = "";
     
-    $("#placeholder").hide().load(url).slideDown( "slow" ).fadeIn(500);
+     $.ajax({
+    			url : url,
+    			data :  "",
+    			type : "GET",
+    			contentType : "application/json",
+    			success: function(result) {
+    				$("#placeholder").html(
+    				$("#listemulators").render({result:result,username:username})
+    			)},
+    			failure : function(result) {
+    				console.log(result);
+    				alert("Some unexpected error occurred, Please try later");
+    			}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
+    //$("#placeholder").hide().load(url).slideDown( "slow" ).fadeIn(500);
 }
-function emulatordetails(id, name, status, deviceType) {
+function emulatordetails(id, name, deviceType, username) {
+	console.log(id);
+	console.log(name);
+	console.log(deviceType);
 // Adding the script tag to the head as suggested before
     var head = document.getElementsByTagName('head')[0];
     var script = document.createElement('script');
@@ -150,15 +187,59 @@ function emulatordetails(id, name, status, deviceType) {
     head.appendChild(script);
 	var htmlelements =	"<div class='customspan35 well'>"+
 					"<p> <b>Emulator Name :</b> <span style='word-wrap: break-word; width: 10%'>"+name+"</span>"+
-					"<br/><br/><b> Status :</b> "+status+
 					"<br/><br/><b> Device Type :</b> "+deviceType+
 					"</p>"+
 					"<form enctype='multipart/form-data' name='fileinfo'>"+
 					"Upload APK file : <input type='file' name='file'><br /> "+
 					 "<br /> Name: <input type='text' name='name' maxlength='32' />"+ 
 					 "<input type='submit' class='btn btn-primary alignright' value='Upload'/>"+
+					  "<input type='button' class='btn btn-primary alignright' value='Start' onclick='access_emulator("+name+","+username+")'/>"+
+					  "<input type='button' class='btn btn-primary alignright' value='Delete' onclick='delete_emulator("+name+","+username+")'/>"+
 					"</form>"+
 					"<div id='output'></div>"+
 					"</div>";
+					document.getElementById("emulatordetails").style.visibilit = "hidden";
 					document.getElementById("emulatordetails").innerHTML = htmlelements;
+					
+	$("#emulatordetails").html(
+    $("#emulator").render({name:id,username:username,deviceType:deviceType, id:id}))
+    document.getElementById("emulatordetails").style.visibilit = "visible";
+}
+
+function access_emulator(name, username) {
+	window.open("/users/"+username+"/emulators/"+name);
+}
+function stop_emulator(name, username) {
+$.ajax({
+    				url : "/users/"+username+"/emulators/"+name,
+    				data : "",
+    				type : "PUT",
+    				contentType : "application/json",
+    				success: function(result) {
+    					loadconfigureddevices(username);
+    				},
+    				failure : function(result) {
+    					console.log(result);
+    					alert("Some unexpected error occurred, Please try later");
+    				}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
+}
+function delete_emulator(name, username) {
+$.ajax({
+    				url : "/users/"+username+"/emulators/"+name,
+    				data : "",
+    				type : "DELETE",
+    				contentType : "application/json",
+    				success: function(result) {
+    					loadconfigureddevices(username);
+    				},
+    				failure : function(result) {
+    					console.log(result);
+    					alert("Some unexpected error occurred, Please try later");
+    				}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
 }

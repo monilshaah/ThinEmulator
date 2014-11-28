@@ -1,5 +1,8 @@
 package com.thinemulator.adapter;
 
+import java.util.Iterator;
+import java.util.List;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -33,9 +36,9 @@ public class MongoDBAdapter {
 		return searchedUser;
 	}
 	
-	public AndroidEmulator getDevice(String emulatorName){
+	public AndroidEmulator getDevice(String emulatorType){
 		System.out.println("*** in getDevice...");
-		Query searchDeviceQuery = new Query(Criteria.where("_id").is(emulatorName));
+		Query searchDeviceQuery = new Query(Criteria.where("_id").is(emulatorType));
 		AndroidEmulator searchedDevice = mongoOperation.findOne(searchDeviceQuery, AndroidEmulator.class);
 		return searchedDevice;
 	}
@@ -60,19 +63,29 @@ public class MongoDBAdapter {
 	}
 	
 	public String removeEmulator(String userId, String emulatorName) {
-		String opStatus;
+		String opStatus = "There are no emulators to delete";
 		Query searchUserQuery = new Query(Criteria.where("_id").is(userId));
 		UserBean searchedUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
-		if (searchedUser.getEmulatorList().contains(emulatorName)) {
-			Update update = new Update();
-			update.pull("emulatorList", emulatorName);
-			mongoOperation.updateFirst(searchUserQuery, update, EmulatorUser.class);
-			//TODO test status of db operation
-			opStatus = "success";
-		} else {
-			opStatus = "Emulator isnot created";
-			System.out.println(opStatus);
+		System.out.println(searchedUser.toString());
+		System.out.println(userId);
+		System.out.println(emulatorName);
+		System.out.println(searchedUser.getEmulatorList());
+		List<DeviceConfig> emulatorList = searchedUser.getEmulatorList();
+		for(DeviceConfig deviceConfig : emulatorList) {
+			System.out.println("AccessTest : "+deviceConfig.getDeviceName());
+			if (deviceConfig.getDeviceName().equalsIgnoreCase(emulatorName)) {
+				Update update = new Update();
+				update.pull("emulatorList", deviceConfig);
+				mongoOperation.updateFirst(searchUserQuery, update, UserBean.class);
+				//TODO test status of db operation
+				opStatus = "success";
+				break;
+			} else {
+				opStatus = "Emulator isnot created";
+				System.out.println(opStatus);
+			}
 		}
+		
 		return opStatus;
 	}
 
