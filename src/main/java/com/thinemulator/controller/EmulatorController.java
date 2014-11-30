@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +47,13 @@ public class EmulatorController {
  		return user;
  	}
  	
+ 	/*@RequestMapping(value = "/tunnel", method = RequestMethod.GET)
+ 	public String getEmuator() {
+ 		System.out.println("***getting emulator GET...");
+ 		//TODO check if user = null or not
+ 		return RestCall.getJSON("http://ec2-54-67-7-120.us-west-1.compute.amazonaws.com:9000/tunnel") ;
+ 	}*/
+ 			
  	/**
  	 * Create user configured emulator and add it to user emulator list
  	 * @param userId

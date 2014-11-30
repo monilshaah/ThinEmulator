@@ -207,8 +207,12 @@ function emulatordetails(id, name, deviceType, username) {
 }
 
 function access_emulator(name, username) {
-	window.open("/users/"+username+"/emulators/"+name);
+	window.open("/accessnow");
+	//"/users/"+username+"/emulators/"+name);
 }
+
+
+
 function stop_emulator(name, username) {
 $.ajax({
     				url : "/users/"+username+"/emulators/"+name,
