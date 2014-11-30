@@ -78,6 +78,13 @@ public class UserController extends SpringBootServletInitializer{
 		return "home";
 	}
 	
+	@RequestMapping(value="/accessnow", method=RequestMethod.GET)
+	public String renderAccessNow(Model model){
+		return "accessnow";
+	}
+	 	
+ 	
+	
 	@RequestMapping(value="/loadnewdeviceform/{username}", method = RequestMethod.GET)
 	public @ResponseBody List<Devices> renderLoadNewDeviceForm(@PathVariable String username) {
 		/*List<Devices> devices = new ArrayList<Devices>();
