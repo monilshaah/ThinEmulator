@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mongodb.BasicDBObject;
+import com.thinemulator.adapter.AndroidEmulatorAdapter;
 import com.thinemulator.beans.SpringMongoConfig;
 import com.thinemulator.beans.UserBean;
 import com.thinemulator.utility.Config;
@@ -38,6 +40,7 @@ import com.thinemulator.utility.NotificationUtility;
 @EnableAutoConfiguration
 @ComponentScan
 public class UserController extends SpringBootServletInitializer{
+	private static Logger logger = Logger.getLogger(UserController.class);
 	private ApplicationContext ctx;
 	private MongoOperations mongoOperation;
 	 
@@ -59,7 +62,7 @@ public class UserController extends SpringBootServletInitializer{
 	
 	@RequestMapping(value={"","/", "/index"}, method = RequestMethod.GET)
 	public String renderIndex(Model model) {
-		System.out.println("returning index file");
+		log("returning index file");
 		model.addAttribute("userbean", new UserBean());
 		return "index";
 	}
@@ -73,7 +76,7 @@ public class UserController extends SpringBootServletInitializer{
 	public String renderHome(@PathVariable String username, Model model) {
 		Query searchUserQuery = new Query(Criteria.where("username").is(username));
 		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
-		System.out.println(user.toString());
+		log(user.toString());
 		model.addAttribute("user", user);
 		return "home";
 	}
@@ -107,7 +110,7 @@ public class UserController extends SpringBootServletInitializer{
 		
 		Query searchUserQuery = new Query(Criteria.where("username").is(username));
 		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
-		System.out.println(user.toString());
+		log(user.toString());
 		Update update = new Update();
 		update.push("userDevices", deviceConfig);
 		mongoOperation.updateFirst(searchUserQuery, update, UserBean.class);
@@ -125,7 +128,7 @@ public class UserController extends SpringBootServletInitializer{
 	public String renderExistingConfigs(@PathVariable String username, Model model) {
 		Query searchUserQuery = new Query(Criteria.where("username").is(username));
 		UserBean user  = mongoOperation.findOne(searchUserQuery, UserBean.class);
-		System.out.println(user.toString());
+		log(user.toString());
 		//TODO : return actual database devices and status
 		List<DeviceConfig> devices = new ArrayList<DeviceConfig>();
 		devices.add(new DeviceConfig("First Application","Running"));
@@ -138,9 +141,9 @@ public class UserController extends SpringBootServletInitializer{
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     @ResponseBody
     public UserBean createUser(@RequestBody final UserBean user) throws Exception{
-    	System.out.println("username : "+user.username);
-    	System.out.println("password : "+user.password);
-    	System.out.println("email : "+user.email);
+    	log("username : "+user.username);
+    	log("password : "+user.password);
+    	log("email : "+user.email);
     	Query searchUserQuery = new Query(Criteria.where("username").is(user.username));
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
     	
@@ -168,9 +171,13 @@ public class UserController extends SpringBootServletInitializer{
     
     @RequestMapping(value="/upload", method=RequestMethod.POST)
     public @ResponseBody String handleFileUpload(@RequestParam("name") String name,
+    		@RequestParam("emulatorName") String emulatorName,
             @RequestParam("file") MultipartFile file){
     	String message = "";
+    	File dir = new File("apk");
+    	File apkFile = null;
         if (!file.isEmpty()) {
+        	// Upload the apk file first
             try {
             	// Verify if it is an apk file
             	if (!file.getOriginalFilename().endsWith(".apk")) {
@@ -178,20 +185,35 @@ public class UserController extends SpringBootServletInitializer{
             		log(message);
             		return message;
             	}
-            	// take emulator name as well from the
-            	//check for apk folder, if exists save apk in this folder and call installAPK AndroidEmulatorAdapter
+            	// If name is provided, use that or else use APK name
+            	if (null == name || name.trim().length() == 0) {
+            		name = file.getOriginalFilename();
+            	} else {
+            		name = name.trim() + ".apk";
+            	}
+            	
+            	// [apk folder is assumed to exist] Saving apk in this folder
+            	apkFile = new File (dir, name);
                 byte[] bytes = file.getBytes();
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File("apk/" + name)));
+                BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(apkFile));
                 stream.write(bytes);
                 stream.close();
-                message = "File successfully uploaded: " + name;
-                log (message);
-                return message;
             } catch (Exception e) {
             	 message = "File failed to upload: " + name;
             	 log (message + " => " + e.getMessage());
             	 return message;
+            }
+        	// Install APK file
+            try {
+            	AndroidEmulatorAdapter emulator = new AndroidEmulatorAdapter();
+                emulator.installAPK(emulatorName, apkFile.getAbsolutePath());
+                message = "File successfully uploaded and installed for: " + emulatorName; 
+                log (message);
+                return message;
+            } catch (Exception e) {
+            	message = "File uploaded, but failed to install: " + name + " for: " + emulatorName;
+	           	log (message + " => " + e.getMessage());
+	           	return message;
             }
         } else {
         	 message = "File failed to upload: " + name + " because the file was empty.";
@@ -204,11 +226,11 @@ public class UserController extends SpringBootServletInitializer{
     	String pwd = DataUtility.getHash(user.password);
     	BasicDBObject query = new BasicDBObject("username", user.username)
         						.append("password", pwd);
-    	System.out.println("User name : "+user.username);
-    	System.out.println("Password : "+user.password);
+    	log("User name : "+user.username);
+    	log("Password : "+user.password);
     	Query searchUserQuery = new Query(Criteria.where("_id").is(user.username).and("password").is(user.password) );
     	UserBean tempUser = mongoOperation.findOne(searchUserQuery, UserBean.class);
-    	System.out.println("USER LOGGED IN : "+tempUser);
+    	log("USER LOGGED IN : "+tempUser);
     	
     	if(null!=tempUser) {
     		String successfulLoginResponse = tempUser.toString();
@@ -236,5 +258,7 @@ public class UserController extends SpringBootServletInitializer{
     // A common method to log messages (so that we can swap out System.out with log4j easily
     public static void log(String message) {
     	System.out.println(message);
+    	// TODO: Add log4j property files and then enable this
+    	//logger.info(message);
     }
 }

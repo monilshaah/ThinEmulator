@@ -10,7 +10,7 @@ form.addEventListener('submit', function(ev) {
   oReq.open("POST", "/upload", true);
   oReq.onload = function(oEvent) {
     if (oReq.status == 200) {
-      oOutput.innerHTML = "Uploaded!";
+      oOutput.innerHTML = oReq.responseText;
       form.reset();
     } else {
       oOutput.innerHTML = "Error " + oReq.status + " occurred uploading your file.<br \/>";
