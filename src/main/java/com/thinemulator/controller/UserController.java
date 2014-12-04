@@ -169,22 +169,34 @@ public class UserController extends SpringBootServletInitializer{
     @RequestMapping(value="/upload", method=RequestMethod.POST)
     public @ResponseBody String handleFileUpload(@RequestParam("name") String name,
             @RequestParam("file") MultipartFile file){
+    	String message = "";
         if (!file.isEmpty()) {
             try {
+            	// Verify if it is an apk file
+            	if (!file.getOriginalFilename().endsWith(".apk")) {
+            		message = "File not uploaded. Please upload an apk file";
+            		log(message);
+            		return message;
+            	}
+            	// take emulator name as well from the
+            	//check for apk folder, if exists save apk in this folder and call installAPK AndroidEmulatorAdapter
                 byte[] bytes = file.getBytes();
                 BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File(name)));
+                        new BufferedOutputStream(new FileOutputStream(new File("apk/" + name)));
                 stream.write(bytes);
                 stream.close();
-                System.out.println( "You successfully uploaded " + name + " into " + name);
-                return "You successfully uploaded "+name;
+                message = "File successfully uploaded: " + name;
+                log (message);
+                return message;
             } catch (Exception e) {
-            	 System.out.println( "You failed to upload " + name + " => " + e.getMessage());
-            	 return "ailed to upload " + name ;
+            	 message = "File failed to upload: " + name;
+            	 log (message + " => " + e.getMessage());
+            	 return message;
             }
         } else {
-        	 System.out.println("You failed to upload " + name + " because the file was empty.");
-        	 return "ailed to upload " + name ;
+        	 message = "File failed to upload: " + name + " because the file was empty.";
+        	 log (message);
+        	 return message;
         }
     }
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -219,5 +231,10 @@ public class UserController extends SpringBootServletInitializer{
     	Query setQuery = new Query( "$set", new BasicDBObject("password", pwd));
     	mongoOperation.updateFirst(searchUserQuery, setQuery, UserBean.class);    
     	*/
+    }
+    
+    // A common method to log messages (so that we can swap out System.out with log4j easily
+    public static void log(String message) {
+    	System.out.println(message);
     }
 }
