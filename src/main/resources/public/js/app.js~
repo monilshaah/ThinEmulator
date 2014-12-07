@@ -74,48 +74,6 @@ $(function() {
     });
 });
 
-
-
-function supportsLocalStorage()
-{
-	try 
-	{
-		return 'localStorage' in window && window['localStorage'] !== null;
-	} 
-	catch (e) 
-	{
-		return false;
-	}
-}
-
-function storeNumber()
-{
-	if(supportsLocalStorage)
-	{
-		var number = document.getElementById("number").value;
-		localStorage.setItem("number", number);
-	}
-	else
-	{
-		document.getElementById("answer").innerHTML="Local Storage is not supported";	
-	}
-}
-
-function getStoredNumber()
-{
-	if(supportsLocalStorage)
-	{
-		document.getElementById("answer").innerHTML=localStorage.getItem("number");
-	}
-	else
-	{
-		document.getElementById("answer").innerHTML="Local Storage is not supported";
-	}
-}
-
-
-
-
 $(function() {
     $('#createnew').submit(function(event) {
     	if(!this.checkValidity())
