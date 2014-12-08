@@ -45,75 +45,67 @@ $(function() {
 
 
 $(function() {
-    $('#signin').submit(function(event){
-   		if(!this.checkValidity())
-    	{
-  			event.preventDefault();
+	$('#signin').submit(function(event){
+		if(!this.checkValidity()) {
+			event.preventDefault();
 			return false;
 		} else {
 			event.preventDefault();
-    		$.ajax({
-    			url :$( '#signin' ).attr( 'action' ),
-    			data :  JSON.stringify($('#signin').serializeObject()),
-    			type : "POST",
-    			contentType : "application/json",
-    			success: function(result) {
-    				if(JSON.parse(result).success == "true") {
-    					location.href = "/home/"+JSON.parse(result).username;
-    					console.log(result);
-    					//$().redirect('home',result);
-    				}else {
-    					alert("Invalid login details");
-    				}
-    			},
-    			failure : function(result) {
-    			console.log(result);	
-    			}
-    		});
-    	}
-    });
+			$.ajax({
+				url :$( '#signin' ).attr( 'action' ),
+				data :  JSON.stringify($('#signin').serializeObject()),
+				type : "POST",
+				contentType : "application/json",
+				success: function(result) {
+					var resultObj = JSON.parse(result);
+					if(resultObj.success == "true") {
+						storeUserInfo(resultObj.username, resultObj.email);
+						location.href = "/home/" + resultObj.username;
+					} else {
+						alert("Invalid login details");
+					}
+				},
+				failure : function(result) {
+					console.log(result);
+				}
+			});
+		}
+	});
 });
 
 
 
 function supportsLocalStorage()
 {
-	try 
-	{
+	try {
 		return 'localStorage' in window && window['localStorage'] !== null;
 	} 
-	catch (e) 
-	{
+	catch (e)  {
 		return false;
 	}
 }
 
-function storeNumber()
+function storeUserInfo(username, email)
 {
-	if(supportsLocalStorage)
-	{
-		var number = document.getElementById("number").value;
-		localStorage.setItem("number", number);
+	if(supportsLocalStorage()) {
+		localStorage.setItem("username", username);
+		localStorage.setItem("email", email);
 	}
-	else
-	{
-		document.getElementById("answer").innerHTML="Local Storage is not supported";	
+	else {
+		console.log("Browser doesn't support local storage");
 	}
 }
 
-function getStoredNumber()
+function getStoredUserInfo()
 {
-	if(supportsLocalStorage)
-	{
-		document.getElementById("answer").innerHTML=localStorage.getItem("number");
-	}
-	else
-	{
-		document.getElementById("answer").innerHTML="Local Storage is not supported";
+	if(supportsLocalStorage()) {
+		return {
+			"username": localStorage.getItem("username"),
+			"email": localStorage.getItem("email")}
+	} else {
+		console.log("Browser doesn't support local storage");
 	}
 }
-
-
 
 
 $(function() {
