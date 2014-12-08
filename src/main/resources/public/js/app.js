@@ -73,6 +73,13 @@ $(function() {
 	});
 });
 
+function validate_login(email, username) {
+	var local_stored_username =getStoredUserInfo().username;
+	var local_stored_email = getStoredUserInfo().email;
+	if(username != local_stored_username || email != local_stored_email) {
+	location.href = "/";	
+	}
+}
 
 $(function() {
 	$('#signout').click(function(event){

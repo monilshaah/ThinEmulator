@@ -23,7 +23,7 @@ $(document).ready(function(){
 		});
 </script>
 </head>
-<body class="background">
+<body class="background" th:object="${user}" th:attr="onload='javascript:validate_login(\''+*{email}+'\', \''+${username}+'\')'">
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<a class="brand" href="../index.html">ThinEmulator</a>
