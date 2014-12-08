@@ -74,6 +74,13 @@ $(function() {
 });
 
 
+$(function() {
+	$('#signout').click(function(event){
+		clearStoredUserInfo();
+		location.href = "/";
+	});
+});
+
 
 function supportsLocalStorage()
 {
@@ -107,6 +114,15 @@ function getStoredUserInfo()
 	}
 }
 
+function clearStoredUserInfo()
+{
+	if(supportsLocalStorage()) {
+		localStorage.removeItem("username");
+		localStorage.removeItem("email");
+	} else {
+		console.log("Browser doesn't support local storage");
+	}
+}
 
 $(function() {
     $('#createnew').submit(function(event) {
