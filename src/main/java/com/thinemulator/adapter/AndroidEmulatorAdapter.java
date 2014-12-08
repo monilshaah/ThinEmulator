@@ -19,14 +19,11 @@ public class AndroidEmulatorAdapter {
 	public static final String DEVICE_DEFINITION = " ".concat(properties.getProperty("DEVICE_DEFINITION")).concat(" ");
 	public static final String ANDROID_AVD = properties.getProperty("ANDROID_AVD").concat(" ");
 	public static final String CREATE_ANDROID_TARGET = " ".concat(properties.getProperty("CREATE_ANDROID_TARGET")).concat(" ");
-	public static final String CREATE_ANDROID_PATH = properties.getProperty("CREATE_ANDROID_PATH");
 	public static final String WAIT_FOR_ADB = properties.getProperty("WAIT_FOR_ADB");
 	public static final String GET_DEVICES = properties.getProperty("GET_DEVICES");
 	public static final String DEVICE_STATUS = properties.getProperty("DEVICE_STATUS");
 	public static final String GET_DEVICE_STATUS_COMMAND = properties.getProperty("GET_DEVICE_STATUS_COMMAND");
 	public static final String INSTALL_COMMAND = properties.getProperty("INSTALL_COMMAND");
-	public static final String ANDROID_APK_FILE = properties.getProperty("ANDROID_APK_FILE");
-	public static final String START_ACTIVITY_VIEW = properties.getProperty("START_ACTIVITY_VIEW");
 
 	
 

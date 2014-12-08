@@ -139,18 +139,24 @@ $(document).ready(function(){
 	<script type="text/x-jsrender" id ="emulator">
 	<div class="customspan35 well">
 					<p> <b>Emulator Name :</b> <span style="word-wrap: break-word; width: 10%">{{>name}}</span>
-					<br/><br/><b> Device Type :</b>{{:deviceType}}</p>
+					<br/><br/><b> Device Type : </b>{{:deviceType}}</p>
 					<form enctype="multipart/form-data" name="fileinfo">
-						Upload APK file : <input type="file" name="file"/><br /> 
-					 <input type="hidden" name="emulatorName" value="{{>name}}" /> 
-					 <input type="submit" class="btn btn-primary alignright" value="Upload" />&nbsp;&nbsp;
-					 <input type="button" class="btn btn-success alignright" value="Start" onclick="access_emulator('{{>name}}', '{{>username}}')" />&nbsp;&nbsp;
- 					<input type="button" class="btn btn-warning alignright" value="Stop" onclick="stop_emulator('{{>name}}', '{{>username}}')" />&nbsp;&nbsp;
-					 <input type="button" class="btn btn-danger alignright" value="Delete" onclick="delete_emulator('{{>name}}', '{{>username}}')" />&nbsp;&nbsp;
-					</form>
+					<fieldset>
+						<legend> Upload APK file  </legend>
+						<input type="file" name="file"/>
+						 <div><input type="hidden" name="emulatorName" value="{{>name}}" /><input type="submit" class="btn btn-primary alignleft" value="Upload" /> </div>
+					 </fieldset><br/>
 					<div id="output"></div>
+					<fieldset>
+  						<legend> Emulator Operations  </legend> 
+						<input type="button" class="btn btn-success alignleft" value="Start" onclick="access_emulator('{{>name}}', '{{>username}}')" />
+					
+ 						<input type="button" class="btn btn-warning aligncenter" value="Stop" onclick="stop_emulator('{{>name}}', '{{>username}}')" />
+					 	<input type="button" class="btn btn-danger alignright" value="Delete" onclick="delete_emulator('{{>name}}', '{{>username}}')" />
+					</fieldset>
+					</form>
+					
 					</div>
-
 	</script>
 	
 	<!-- <div class="span4 well">

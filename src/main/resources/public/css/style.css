@@ -16,6 +16,20 @@ body {
 	width: 70%;
 }
 	
+fieldset {
+	padding: 1em;
+font: 80%/1 sans-serif;
+border: 2px solid rgb(207, 211, 207);
+   }
+
+legend {
+  padding: initial;
+border: 2px solid rgb(19, 147, 19);
+color: black;
+font-size: 18px;
+text-align: center;
+  }
+  
 /* ===========================
    ========= Headings ======== 
    =========================== */
