@@ -1,5 +1,6 @@
 package com.thinemulator.controller;
  
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +122,31 @@ public class EmulatorController {
  		if (emulatorProcess != null) {
  			ThinEmulatorApp.runningAndroidEmulator.put(emulatorName, emulatorProcess);
  			responseBody.put("success", "true");
+ 			try {
+ 			Field processField = emulatorProcess.getClass().getDeclaredField("pid");
+ 			processField.setAccessible(true);
+ 			
+ 			
+				responseBody.put("processId",String.valueOf((int)processField.get(emulatorProcess)));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("***Emulator not launched!!!");
+	 			responseBody.put("success", "false");
+	 			responseBody.put("errors", "emulator is not launched");
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("***Emulator not launched!!!");
+	 			responseBody.put("success", "false");
+	 			responseBody.put("errors", "emulator is not launched");
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("***Emulator not launched!!!");
+	 			responseBody.put("success", "false");
+	 			responseBody.put("errors", "emulator is not launched");
+			}
  		} else {
  			System.out.println("***Emulator not launched!!!");
  			responseBody.put("success", "false");
@@ -152,6 +178,10 @@ public class EmulatorController {
  		}
  		return new ResponseEntity<Map<String,String>>(responseBody, new HttpHeaders(), HttpStatus.OK);
  	}
+ 	
+ 	
+ 	
+ 	
  	
  	/**
  	 * Delete user emulator

@@ -142,12 +142,11 @@ $(document).ready(function(){
 					<br/><br/><b> Device Type :</b>{{:deviceType}}</p>
 					<form enctype="multipart/form-data" name="fileinfo">
 						Upload APK file : <input type="file" name="file"/><br /> 
-					 <br /> Name: <input type="text" name="name" maxlength="32" placeholder="Leave blank for default" />
 					 <input type="hidden" name="emulatorName" value="{{>name}}" /> 
-					 <input type="submit" class="btn btn-primary alignright" value="Upload" />
-					 <input type="button" class="btn btn-primary alignright" value="Start" onclick="access_emulator('{{>name}}', '{{>username}}')" />
- 					<input type="button" class="btn btn-primary alignright" value="Stop" onclick="stop_emulator('{{>name}}', '{{>username}}')" />
-					 <input type="button" class="btn btn-primary alignright" value="Delete" onclick="delete_emulator('{{>name}}', '{{>username}}')" />
+					 <input type="submit" class="btn btn-primary alignright" value="Upload" />&nbsp;&nbsp;
+					 <input type="button" class="btn btn-success alignright" value="Start" onclick="access_emulator('{{>name}}', '{{>username}}')" />&nbsp;&nbsp;
+ 					<input type="button" class="btn btn-warning alignright" value="Stop" onclick="stop_emulator('{{>name}}', '{{>username}}')" />&nbsp;&nbsp;
+					 <input type="button" class="btn btn-danger alignright" value="Delete" onclick="delete_emulator('{{>name}}', '{{>username}}')" />&nbsp;&nbsp;
 					</form>
 					<div id="output"></div>
 					</div>

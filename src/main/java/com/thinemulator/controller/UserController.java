@@ -4,7 +4,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,6 +19,9 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,8 +86,9 @@ public class UserController extends SpringBootServletInitializer{
 		return "home";
 	}
 	
-	@RequestMapping(value="/accessnow", method=RequestMethod.GET)
-	public String renderAccessNow(Model model){
+	@RequestMapping(value="/accessnow/{processId}", method=RequestMethod.GET)
+	public String renderAccessNow(@PathVariable String processId, Model model){
+		model.addAttribute("processId", processId);
 		return "accessnow";
 	}
 	 	
@@ -170,11 +176,11 @@ public class UserController extends SpringBootServletInitializer{
     
     
     @RequestMapping(value="/upload", method=RequestMethod.POST)
-    public @ResponseBody String handleFileUpload(@RequestParam("name") String name,
-    		@RequestParam("emulatorName") String emulatorName,
+    public @ResponseBody String handleFileUpload(@RequestParam("emulatorName") String emulatorName,
             @RequestParam("file") MultipartFile file){
     	String message = "";
     	File dir = new File("apk");
+    	String name = "";
     	File apkFile = null;
         if (!file.isEmpty()) {
         	// Upload the apk file first
@@ -186,11 +192,11 @@ public class UserController extends SpringBootServletInitializer{
             		return message;
             	}
             	// If name is provided, use that or else use APK name
-            	if (null == name || name.trim().length() == 0) {
-            		name = file.getOriginalFilename();
-            	} else {
-            		name = name.trim() + ".apk";
-            	}
+            	//if (null == name || name.trim().length() == 0) {
+            		 name = file.getOriginalFilename();
+            	//} else {
+            	//	name = name.trim() + ".apk";
+            	//}
             	
             	// [apk folder is assumed to exist] Saving apk in this folder
             	apkFile = new File (dir, name);
@@ -242,7 +248,19 @@ public class UserController extends SpringBootServletInitializer{
     	}
     }
     
-    
+    /**
+ 	 * Stop emulators which has been started previously
+ 	 * @param emulatorName
+ 	 * @return operation status and errors if any as JSON
+ 	 */
+ 	@RequestMapping(value = "/retrytelnet", method = RequestMethod.GET)
+ 	public ResponseEntity<Map<String,String>> retrytelnet() {
+ 		AndroidEmulatorAdapter androidEmulatorAdapter = new AndroidEmulatorAdapter();
+ 		Map<String, String> responseBody = new HashMap<String, String>();
+ 		androidEmulatorAdapter.retryTelnet();
+ 		return new ResponseEntity<Map<String,String>>(responseBody, new HttpHeaders(), HttpStatus.OK);
+ 	}
+ 	
     @RequestMapping(value = "/signup/emailauth", method = RequestMethod.PUT)
     @ResponseBody
     public void emailAuth(@RequestBody final User user,

@@ -256,9 +256,27 @@ function emulatordetails(id, name, deviceType, username) {
     document.getElementById("emulatordetails").style.visibilit = "visible";
 }
 
+
+
 function access_emulator(name, username) {
-	window.open("/accessnow");
+	
 	//"/users/"+username+"/emulators/"+name);
+	
+	$.ajax({
+    				url : "/users/"+username+"/emulators/"+name,
+    				data : "",
+    				type : "GET",
+    				contentType : "application/json",
+    				success: function(result) {
+    					window.open("/accessnow/"+result.processId);
+    				},
+    				failure : function(result) {
+    					console.log(result);
+    					alert("Some unexpected error occurred, Please try later");
+    				}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
 }
 
 
@@ -288,6 +306,24 @@ $.ajax({
     				contentType : "application/json",
     				success: function(result) {
     					loadconfigureddevices(username);
+    				},
+    				failure : function(result) {
+    					console.log(result);
+    					alert("Some unexpected error occurred, Please try later");
+    				}
+    			}).error(function(status, result, xhr){
+    				alert(JSON.parse(status.responseText).message);
+    			});
+}
+
+function retry_telnet() {
+$.ajax({
+    				url : "/retrytelnet",
+    				data : "",
+    				type : "GET",
+    				contentType : "application/json",
+    				success: function(result) {
+    					location.reload();
     				},
     				failure : function(result) {
     					console.log(result);

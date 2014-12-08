@@ -1,9 +1,11 @@
 package com.thinemulator.adapter;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
-import com.thinemulator.beans.AndroidEmulator;
 import com.thinemulator.utility.Config;
 
 public class AndroidEmulatorAdapter {
@@ -41,7 +43,8 @@ public class AndroidEmulatorAdapter {
 		Runtime runTime = Runtime.getRuntime();
 		try {
 		System.out.println(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(deviceName).concat(CREATE_ANDROID_TARGET).concat(targetId).concat(DEVICE_DEFINITION).concat(deviceId));
-		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(deviceName).concat(CREATE_ANDROID_TARGET).concat(targetId).concat(DEVICE_DEFINITION).concat(deviceId));
+		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(ANDROID_ADDRESS).concat(CREATE_ANDROID).concat(ANDROID_AVD).concat(deviceName).concat(CREATE_ANDROID_TARGET).concat(targetId).concat(DEVICE_DEFINITION).concat(deviceId).concat(" --abi default/armeabi-v7a"));
+		System.out.println(launchEmulatorProcess.waitFor());
 		/* InputStream stderr = launchEmulatorProcess.getErrorStream();
          InputStreamReader isr = new InputStreamReader(stderr);
          BufferedReader br = new BufferedReader(isr);
@@ -68,8 +71,23 @@ public class AndroidEmulatorAdapter {
 	public Process startEmulator(String emulatorName) {
 		Runtime runTime = Runtime.getRuntime();
 		try {
-		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(EMULATOR_ADDRESS).concat(" -avd ").concat(emulatorName));
-		System.out.println(ANDRIOD_SDK_ADDRESS.concat(EMULATOR_ADDRESS).concat(" -avd ").concat(emulatorName));
+		Process launchEmulatorProcess = runTime.exec(ANDRIOD_SDK_ADDRESS.concat(EMULATOR_ADDRESS).concat(" -avd ").concat(emulatorName).concat(" -no-window"));
+		System.out.println(ANDRIOD_SDK_ADDRESS.concat(EMULATOR_ADDRESS).concat(" -avd ").concat(emulatorName).concat(" -no-window"));
+		Thread.sleep(5000);
+		Process installFastDroid = runTime.exec(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s "+" emulator-5554 push fastdroid-vnc /data/");
+		System.out.println("install fast droid "+ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" "+WAIT_FOR_ADB+" -s "+" emulator-5554 push fastdroid-vnc /data/");
+		Thread.sleep(3000);
+		System.out.println(installFastDroid.waitFor());
+		Process chmodFastDroid = runTime.exec(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell chmod 755 /data/fastdroid-vnc");
+		System.out.println(chmodFastDroid.waitFor());
+		Thread.sleep(1000);
+		System.out.println("chmod fast droid "+ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell chmod 755 /data/fastdroid-vnc");
+		Process runFastDroid = runTime.exec(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell /data/fastdroid-vnc &");
+		//System.out.println(runFastDroid.waitFor());
+		System.out.println("run fast droid "+ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell /data/fastdroid-vnc &");
+		Thread.sleep(2000);
+		Process startTelnet = runTime.exec("expect telnetCmd.sh");
+		
 		/*InputStream stderr = launchEmulatorProcess.getErrorStream();
         InputStreamReader isr = new InputStreamReader(stderr);
         BufferedReader br = new BufferedReader(isr);
@@ -77,7 +95,8 @@ public class AndroidEmulatorAdapter {
         System.out.println("<ERROR>");
         while ( (line = br.readLine()) != null)
             System.out.println(line);
-        System.out.println("</ERROR>");*/
+        System.out.println("</ERROR>");
+		*/
 		return launchEmulatorProcess;
 		} catch (IOException e) {
 			
@@ -88,6 +107,29 @@ public class AndroidEmulatorAdapter {
 		return null;
 	}
 	
+	public void retryTelnet() {
+		try {
+			Runtime runTime = Runtime.getRuntime();
+			Process installFastDroid = runTime.exec(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s "+" emulator-5554 push fastdroid-vnc /data/");
+			System.out.println("install fast droid "+ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" "+WAIT_FOR_ADB+" -s "+" emulator-5554 push fastdroid-vnc /data/");
+			Thread.sleep(3000);
+			System.out.println(installFastDroid.waitFor());
+			Process chmodFastDroid = runTime.exec(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell chmod 755 /data/fastdroid-vnc");
+			System.out.println(chmodFastDroid.waitFor());
+			Thread.sleep(1000);
+			System.out.println("chmod fast droid "+ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell chmod 755 /data/fastdroid-vnc");
+			Process runFastDroid = runTime.exec(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell /data/fastdroid-vnc &");
+			//System.out.println(runFastDroid.waitFor());
+			System.out.println("run fast droid "+ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" -s emulator-5554 shell /data/fastdroid-vnc &");
+			Thread.sleep(2000);
+			Process startTelnet = runTime.exec("expect telnetCmd.sh");
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public void deleteEmulator(String emulatorName) {
 		Runtime runTime = Runtime.getRuntime();
 		try {
@@ -109,6 +151,7 @@ public class AndroidEmulatorAdapter {
 	 */
 	public void installAPK(String emulatorName, String APKPath) throws IOException {
 		Runtime runTime = Runtime.getRuntime();
-		Process installAPKOnEmulator = runTime.exec(ANDROID_ADB_PATH+" "+WAIT_FOR_ADB+" "+INSTALL_COMMAND+" "+ANDROID_APK_FILE);
+		Process installAPKOnEmulator = runTime.exec(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" "+INSTALL_COMMAND+" "+APKPath);
+		System.out.println(ANDRIOD_SDK_ADDRESS+ANDROID_ADB_PATH+" "+INSTALL_COMMAND+" "+APKPath);
 	}
 }
