@@ -16,7 +16,29 @@ $.fn.serializeObject = function()
 };
 
 
+function index_onload() {
+    userInfo = getStoredUserInfo();
+
+    if ($('#signup_ui')) {
+        if (userInfo && userInfo.username) {
+            $('#signup_ui').hide();
+            $('#login_ui').hide();
+            $('#userinfo_ui').show();
+
+            $('#logged_in_email').html('Email: ' + userInfo.email);
+            $('#logged_in_username').html('Name: ' + userInfo.username);
+        } else {
+            $('#signup_ui').show();
+            $('#login_ui').show();
+            $('#userinfo_ui').hide();
+        }
+    }
+}
+
+
 $(function() {
+    index_onload();
+
     $('#signup').submit(function(event) {
     	if(!this.checkValidity())
     		{
@@ -84,6 +106,7 @@ function validate_login(email, username) {
 $(function() {
 	$('#signout').click(function(event){
 		clearStoredUserInfo();
+        index_onload();
 		location.href = "/";
 	});
 });

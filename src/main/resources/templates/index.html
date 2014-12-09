@@ -38,16 +38,16 @@ $(document).ready(function(){
 </div>
 <br/>
 <div class="row ">
-	<div class="customspan25 leftmenu">
+	<div class="customspan25 leftmenu" id="signup_ui" style="display:none;">
 		<br/>
 		<div class=" well" >	
-	<form method="post" action="#" th:action="@{/signup}" th:object="${userbean}" id="signup">
+			<form method="post" action="#" th:action="@{/signup}" th:object="${userbean}" id="signup">
 			<input type="text" th:field="*{username}" placeHolder="First Name" required="required"></input>
 			<!-- <input type="text" name="last_name" placeHolder="Last Name" required/>
 			<select name="gender" placeHolder="Gender">
 				<option value="Male">Male</option>
 				<option value="Female">Female</option>
-			</select>
+			</selec>
 			<input type="tel"  name="contact_number" placeHolder="Contact Number" required/> -->
 			<input type="email" th:field="*{email}" placeHolder="Email Address" required="required"/>
 			<!-- <input type="text" name="city" placeHolder="City" required/>
@@ -56,10 +56,32 @@ $(document).ready(function(){
 			<!-- <input type="password" name="confirm_password" placeHolder="Confirm password" required/> -->
 			<br/>
 			<input type="submit" class="btn btn-primary alignright" name="signup" value="Sign Up" id="signupbutton" />
-	</form>
+			</form>
+		</div>
 	</div>
+	<div class="customspan25 leftmenu" id="userinfo_ui">
+		<br/>
+		<div class=" well">
+			<div class="accordion" >
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1"
+							href="#collapseOne">User Profile</a>
+					</div>
+					<div id="collapseOne" class="accordion-body collapse in">
+						<div class="accordion-inner">
+							<ul class="nav nav-pills nav-stacked">
+								<li id="logged_in_email"></li>
+								<li id="logged_in_username"></li>
+							</ul>					
+							<div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-
 	<br/>
 	<div class="mainContent">
 	<div class="vertical">
@@ -76,7 +98,7 @@ $(document).ready(function(){
 		</div>
 	</div>
 	
-	<aside class="top-sidebar well">
+	<aside class="top-sidebar well" id="login_ui">
 					<article>
 					<!--<h3>Contact Us : <br/></h3>-->
 					<form  method="post" action="#" th:action="@{/login}" th:object="${userbean}" id="signin">
