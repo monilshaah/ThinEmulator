@@ -36,7 +36,22 @@ ThinEmulator is built using Gradle. Building ThinEmulator compiles all classes a
     Once all dependencies have been downloaded, the .jar file will be
     created in the build/libs/ subdirectory of the current directory.
     
-2. Run .jar using java
+2. Build gaucamole client design for ThinEmulator (https://github.com/monilshaah/Gaucamole-Client-for-ThinEmulator) to communicate with guacd proxy of guacamole server.
+
+    $ Gaucamole-Client-for-ThinEmulator$ mvn package
+    
+    Maven will download any needed dependencies for building the .jar file.
+    Once all dependencies have been downloaded, the .war file will be
+    created in the target/ subdirectory of the current directory.
+    
+    Copy the .war file as directed in the instructions provided with
+    your servlet container. Apache Tomcat, Jetty, and other servlet containers
+    have specific and varying locations that .war files must be placed for
+    the web application to be deployed.
+    
+    You will likely need to do this as root.
+
+3. Run .jar file created in step 1 using java
 
     $ java -jar /build/libs/ThinEmulator-0.0.1.jar
     
