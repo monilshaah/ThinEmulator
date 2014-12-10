@@ -24,7 +24,7 @@ function index_onload() {
             $('#signup_ui').hide();
             $('#login_ui').hide();
             $('#userinfo_ui').show();
-            $('#signout').show();
+            $('#homepanel').show();
 
             $('#logged_in_email').html('Email: ' + userInfo.email);
             $('#logged_in_username').html('Name: ' + userInfo.username);
@@ -32,7 +32,7 @@ function index_onload() {
             $('#signup_ui').show();
             $('#login_ui').show();
             $('#userinfo_ui').hide();
-            $('#signout').hide();
+            $('#homepanel').hide();
         }
     }
 }
@@ -110,6 +110,16 @@ $(function() {
 		clearStoredUserInfo();
         index_onload();
 		location.href = "/";
+	});
+	
+	
+	
+});
+
+$(function() {
+	$('#home').click(
+	function(event) {
+		location.href = "/home/" +localStorage.getItem("username");
 	});
 });
 
