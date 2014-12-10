@@ -7,7 +7,7 @@ This README is intended to provide brief overview of Project ThinEmulator.
  What is Project ThinEmulator:
 -------------------------------
 
-Project ThinEmulator is an initiative to enable cloud-based smartphone emulator platform. It enables user to create and use smartphone emulators on-the-go for various purposes such as testing of smartphone application. Those emulators can be remotely access from any modern web browser which supports HTML5/JavaScript without installing any libraries. 
+Project ThinEmulator is an initiative to enable cloud-based smartphone emulator platform. It enables user to create and use smartphone emulators on-the-go for various purposes such as testing of smartphone applications. These emulators can be remotely accessed from any modern web browser which supports HTML5/JavaScript without installing any libraries. 
 
 Current Version: ThinEmulator-0.0.1
 ------------------------------------
