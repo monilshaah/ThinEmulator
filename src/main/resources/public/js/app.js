@@ -19,21 +19,19 @@ $.fn.serializeObject = function()
 function index_onload() {
     userInfo = getStoredUserInfo();
 
-    if ($('#signup_ui')) {
-        if (userInfo && userInfo.username) {
-            $('#signup_ui').hide();
-            $('#login_ui').hide();
-            $('#userinfo_ui').show();
-            $('#homepanel').show();
+    if (userInfo && userInfo.username) {
+        $('#signup_ui').hide();
+        $('#login_ui').hide();
+        $('#userinfo_ui').show();
+        $('#homepanel').show();
 
-            $('#logged_in_email').html('Email: ' + userInfo.email);
-            $('#logged_in_username').html('Name: ' + userInfo.username);
-        } else {
-            $('#signup_ui').show();
-            $('#login_ui').show();
-            $('#userinfo_ui').hide();
-            $('#homepanel').hide();
-        }
+        $('#logged_in_email').html('Email: ' + userInfo.email);
+        $('#logged_in_username').html('Name: ' + userInfo.username);
+    } else {
+        $('#signup_ui').show();
+        $('#login_ui').show();
+        $('#userinfo_ui').hide();
+        $('#homepanel').hide();
     }
 }
 
@@ -54,7 +52,10 @@ $(function() {
     				type : "POST",
     				contentType : "application/json",
     				success: function(result) {
+    					storeUserInfo(result.username, result.email);
     					location.href = "/welcome";
+    					
+    					
     				},
     				failure : function(result) {
     					console.log(result);
